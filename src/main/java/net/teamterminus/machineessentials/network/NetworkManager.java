@@ -3,15 +3,21 @@ package net.teamterminus.machineessentials.network;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.States;
 import net.modificationstation.stationapi.api.event.world.BlockSetEvent;
+import net.modificationstation.stationapi.api.event.world.WorldEvent;
 import net.modificationstation.stationapi.api.event.world.WorldPropertiesEvent;
 import net.modificationstation.stationapi.api.world.StationFlatteningWorld;
 import net.teamterminus.machineessentials.util.BlockChangeInfo;
 import net.teamterminus.machineessentials.util.Vec3i;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -40,6 +46,33 @@ public class NetworkManager {
 			removeBlock(new BlockChangeInfo(event.world,new Vec3i(event.x, event.y, event.z),event.blockState,event.blockMeta));
 		} else {
 			addBlock(new BlockChangeInfo(event.world,new Vec3i(event.x, event.y, event.z),event.blockState,event.blockMeta));
+		}
+	}
+
+	@EventListener
+	public void initNetsEvent(WorldEvent.Init event) {
+		File file = event.world.getDimensionData().getWorldPropertiesFile("networks");
+		if (file.exists()) {
+			try {
+				NbtCompound tag = NbtIo.readCompressed(new FileInputStream(file));
+				NetworkManager.netsFromTag(World.class.cast(this), tag);
+			}
+			catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@EventListener
+	public void saveNetsEvent(WorldEvent.Save event) {
+		try {
+			File file = event.world.getDimensionData().getWorldPropertiesFile("networks");
+			NbtCompound tag = NbtIo.readCompressed(new FileInputStream(file));
+			NetworkManager.netsToTag(World.class.cast(this), tag);
+			NbtIo.writeCompressed(tag, new FileOutputStream(file));
+		}
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
 	}
 
