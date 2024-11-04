@@ -7,6 +7,7 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.States;
 import net.modificationstation.stationapi.api.event.world.BlockSetEvent;
+import net.modificationstation.stationapi.api.event.world.WorldPropertiesEvent;
 import net.modificationstation.stationapi.api.world.StationFlatteningWorld;
 import net.teamterminus.machineessentials.util.BlockChangeInfo;
 import net.teamterminus.machineessentials.util.Vec3i;
@@ -35,7 +36,7 @@ public class NetworkManager {
 
 	@EventListener
 	public void blockChanged(BlockSetEvent event) {
-		if(event.blockState == States.AIR){
+		if(event.blockState == States.AIR.get()){
 			removeBlock(new BlockChangeInfo(event.world,new Vec3i(event.x, event.y, event.z),event.blockState,event.blockMeta));
 		} else {
 			addBlock(new BlockChangeInfo(event.world,new Vec3i(event.x, event.y, event.z),event.blockState,event.blockMeta));
