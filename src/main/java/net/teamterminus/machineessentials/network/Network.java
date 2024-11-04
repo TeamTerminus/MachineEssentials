@@ -266,9 +266,8 @@ public class Network {
 		if (obj == this) {
 			return true;
 		}
-		if (obj instanceof Network) {
-			Network net = (Network) obj;
-			Optional<Vec3i> optional = net.blocks.keySet().stream().findAny();
+		if (obj instanceof Network net) {
+            Optional<Vec3i> optional = net.blocks.keySet().stream().findAny();
 			if (optional.isPresent()) {
 				Vec3i pos = optional.get();
 				return blocks.containsKey(pos);
