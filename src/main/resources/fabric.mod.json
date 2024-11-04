@@ -1,23 +1,26 @@
 {
   "schemaVersion": 1,
-  "id": "genericnetworks",
+  "id": "machineessentials",
   "version": "${version}",
 
-  "name": "Generic Networks API",
-  "description": "Work in progress API for creating generic networks of blocks for StAPI",
+  "name": "Machine Essentials",
+  "description": "Work in progress API to handle most of your tech mod needs.",
   "authors": [
     "Team Terminus"
   ],
   "contact": {
-    "sources": "https://github.com/TeamTerminus/GNAPI"
+    "homepage": "https://glass-launcher.net/",
+    "sources": "https://github.com/calmilamsy/stationapi-example-mod"
   },
 
-  "license": "MIT",
-  "icon": "icon.png",
+  "license": "CC0-1.0",
+  "icon": "assets/machineessentials/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "stationapi:event_bus": [
+      "net.teamterminus.machineessentials.events.init.InitListener",
+      "net.teamterminus.machineessentials.network.NetworkManager"
     ],
     "stationapi:event_bus_client": [
     ],
@@ -25,7 +28,7 @@
     ]
   },
   "mixins": [
-    "generic-networks.mixins.json"
+    "machineessentials.mixins.json"
   ],
 
   "depends": {

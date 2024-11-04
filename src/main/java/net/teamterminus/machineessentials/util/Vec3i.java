@@ -1,0 +1,193 @@
+package net.teamterminus.machineessentials.util;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.util.math.Direction;
+import net.modificationstation.stationapi.api.world.StationFlatteningWorld;
+
+public class Vec3i {
+    public int x;
+    public int y;
+    public int z;
+
+    public Vec3i(int x, int y, int z){
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
+	public Vec3i(){
+        this.x = this.y = this.z = 0;
+    }
+
+    public Vec3i(int size){
+        this.x = this.y = this.z = size;
+    }
+
+    public Vec3i(NbtCompound tag){
+        readFromNBT(tag);
+    }
+
+
+    @Override
+    public String toString() {
+        return "Vec3i{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                '}';
+    }
+
+    public double distanceTo(Vec3f vec3f) {
+        double d = vec3f.x - this.x;
+        double d1 = vec3f.y - this.y;
+        double d2 = vec3f.z - this.z;
+        return MathHelper.sqrt(d * d + d1 * d1 + d2 * d2);
+    }
+
+	public double distanceTo(Vec3i vec3i) {
+		double d = vec3i.x - this.x;
+		double d1 = vec3i.y - this.y;
+		double d2 = vec3i.z - this.z;
+		return MathHelper.sqrt(d * d + d1 * d1 + d2 * d2);
+	}
+
+	public void set(int x, int y, int z){
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
+
+    public Vec3i add(int value){
+        this.x += value;
+        this.y += value;
+        this.z += value;
+        return this;
+    }
+
+    public Vec3i subtract(int value){
+        this.x -= value;
+        this.y -= value;
+        this.z -= value;
+        return this;
+    }
+
+    public Vec3i divide(int value){
+        this.x /= value;
+        this.y /= value;
+        this.z /= value;
+        return this;
+    }
+
+    public Vec3i multiply(int value){
+        this.x *= value;
+        this.y *= value;
+        this.z *= value;
+        return this;
+    }
+
+    public Vec3i add(Vec3i value){
+        this.x += value.x;
+        this.y += value.y;
+        this.z += value.z;
+        return this;
+    }
+
+    public Vec3i subtract(Vec3i value){
+        this.x -= value.x;
+        this.y -= value.y;
+        this.z -= value.z;
+        return this;
+    }
+
+    public Vec3i divide(Vec3i value){
+        this.x /= value.x;
+        this.y /= value.y;
+        this.z /= value.z;
+        return this;
+    }
+
+    public Vec3i multiply(Vec3i value){
+        this.x *= value.x;
+        this.y *= value.y;
+        this.z *= value.z;
+        return this;
+    }
+
+	public Vec3i set(Direction.Axis axis, int value){
+        return switch (axis) {
+            case X -> {
+                this.x = value;
+                yield this;
+            }
+            case Y -> {
+                this.y = value;
+                yield this;
+            }
+            case Z -> {
+                this.z = value;
+                yield this;
+            }
+        };
+	}
+
+	public int get(Direction.Axis axis){
+        return switch (axis) {
+            case X -> x;
+            case Y -> y;
+            case Z -> z;
+        };
+	}
+
+	public void writeToNBT(NbtCompound tag){
+        tag.putInt("x",this.x);
+        tag.putInt("y",this.y);
+        tag.putInt("z",this.z);
+    }
+
+    public void readFromNBT(NbtCompound tag){
+        this.x = tag.getInt("x");
+        this.y = tag.getInt("y");
+        this.z = tag.getInt("z");
+    }
+
+    public Vec3i copy(){
+        return new Vec3i(this.x,this.y,this.z);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Vec3i vec3I = (Vec3i) o;
+
+        if (x != vec3I.x) return false;
+        if (y != vec3I.y) return false;
+        return z == vec3I.z;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = x;
+        result = 31 * result + y;
+        result = 31 * result + z;
+        return result;
+    }
+
+	public BlockEntity getTileEntity(BlockView worldSource){
+		return worldSource.getBlockEntity(this.x, this.y, this.z);
+	}
+
+	public Block getBlock(StationFlatteningWorld worldSource){
+		return worldSource.getBlockState(this.x, this.y, this.z).getBlock();
+	}
+
+	public int getBlockMetadata(BlockView worldSource){
+		return worldSource.getBlockMeta(this.x, this.y, this.z);
+	}
+}
