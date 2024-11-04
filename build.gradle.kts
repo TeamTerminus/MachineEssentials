@@ -20,7 +20,6 @@ group = project.properties["maven_group"] as String
 
 loom {
 //	accessWidenerPath = file("src/main/resources/examplemod.accesswidener")
-
 	runs {
 		// If you want to make a testmod for your mod, right click on src, and create a new folder with the same name as source() below.
 		// Intellij should give suggestions for testmod folders.
