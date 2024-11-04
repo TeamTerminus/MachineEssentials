@@ -42,17 +42,21 @@ public class MachineEssentials {
         return array;
     }
 
-    public static double map(double valueCoord,
-                             double startCoord1, double endCoord1,
-                             double startCoord2, double endCoord2) {
+    /**
+     * Maps a value from one range to another.
+     * @return The resuling value after being mapped from one range to another
+     */
+    public static double map(double value,
+                             double fromMin, double fromMax,
+                             double toMin, double toMax) {
 
         final double EPSILON = 1e-12;
-        if (Math.abs(endCoord1 - startCoord1) < EPSILON) {
+        if (Math.abs(fromMax - fromMin) < EPSILON) {
             throw new ArithmeticException("Division by 0");
         }
 
-        double ratio = (endCoord2 - startCoord2) / (endCoord1 - startCoord1);
-        return ratio * (valueCoord - startCoord1) + startCoord2;
+        double ratio = (toMax - toMin) / (fromMax - fromMin);
+        return ratio * (value - fromMin) + toMin;
     }
 
     @SafeVarargs

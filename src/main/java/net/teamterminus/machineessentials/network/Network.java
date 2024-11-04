@@ -8,12 +8,16 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.resource.metadata.BlockEntry;
 import net.modificationstation.stationapi.api.util.math.Vec3i;
 import net.teamterminus.machineessentials.MachineEssentials;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+/**
+ * A network of blocks.
+ */
 public class Network {
 	
 	public static final Vec3i[] OFFSETS = new Vec3i[]{
@@ -25,7 +29,7 @@ public class Network {
 			new Vec3i(0, 0, 1),
 	};
 
-	protected final Map<Vec3i, NetworkComponent> networkBlocks = Maps.newHashMap();
+	protected final Map<Vec3i, INetworkComponent> networkBlocks = Maps.newHashMap();
 	protected final Map<Vec3i, BlockEntry> blocks = Maps.newHashMap();
 	protected final World world;
 	protected final int id;
@@ -44,6 +48,11 @@ public class Network {
 		this.random = new Random(id);
 	}
 
+	/**
+	 * Returns a list of paths possible in this network from the current position.
+	 * @param pos The position to start from
+	 * @return List of possible <code>NetworkPath</code>s sorted according to their distance from <code>pos</code>
+	 */
 	public List<NetworkPath> getPathData(Vec3i pos){
 		List<NetworkPath> routes = NET_PATH_DATA.get(pos);
 		if(routes == null){
@@ -72,10 +81,10 @@ public class Network {
 
 		Vec3i pos = new Vec3i(x, y, z);
 		blocks.put(pos, new BlockEntry(block, meta));
-		if (block instanceof NetworkComponent) {
-			networkBlocks.put(pos, (NetworkComponent) block);
-			if(world.getBlockEntity(x,y,z) instanceof NetworkComponentTile){
-				((NetworkComponentTile) world.getBlockEntity(x,y,z)).networkChanged(this);
+		if (block instanceof INetworkComponent) {
+			networkBlocks.put(pos, (INetworkComponent) block);
+			if(world.getBlockEntity(x,y,z) instanceof INetworkComponentTile){
+				((INetworkComponentTile) world.getBlockEntity(x,y,z)).networkChanged(this);
 			}
 			update();
 		}
@@ -84,10 +93,10 @@ public class Network {
 
 	public List<Network> removeBlock(int x, int y, int z) {
 		Vec3i pos = new Vec3i(x, y, z);
-		NetworkComponent component = networkBlocks.get(pos);
+		INetworkComponent component = networkBlocks.get(pos);
 		if (component != null) {
-			if(world.getBlockEntity(x,y,z) instanceof NetworkComponentTile){
-				((NetworkComponentTile) world.getBlockEntity(x,y,z)).removedFromNetwork(this);
+			if(world.getBlockEntity(x,y,z) instanceof INetworkComponentTile){
+				((INetworkComponentTile) world.getBlockEntity(x,y,z)).removedFromNetwork(this);
 			}
 		}
 		networkBlocks.remove(pos);
@@ -132,12 +141,12 @@ public class Network {
 
 			preNet.forEach(blockPos -> {
 				sideNet.blocks.put(blockPos, blocks.get(blockPos));
-				NetworkComponent netBlock = networkBlocks.get(blockPos);
+				INetworkComponent netBlock = networkBlocks.get(blockPos);
 				if (netBlock != null) {
 					sideNet.networkBlocks.put(blockPos, netBlock);
 					BlockEntity tile = world.getBlockEntity(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-					if(tile instanceof NetworkComponentTile){
-						((NetworkComponentTile) tile).networkChanged(sideNet);
+					if(tile instanceof INetworkComponentTile){
+						((INetworkComponentTile) tile).networkChanged(sideNet);
 					}
 				}
 			});
@@ -158,8 +167,8 @@ public class Network {
 		}
 		networkBlocks.forEach((pos, networkComponent) -> {
 			BlockEntity tile = world.getBlockEntity(pos.getX(), pos.getY(), pos.getZ());
-			if(tile instanceof NetworkComponentTile){
-				((NetworkComponentTile) tile).networkChanged(net);
+			if(tile instanceof INetworkComponentTile){
+				((INetworkComponentTile) tile).networkChanged(net);
 			}
 		});
 		NET_PATH_DATA.clear();
@@ -170,7 +179,7 @@ public class Network {
 		NbtList positions = new NbtList();
 		net.put("blocks", positions);
 		net.putInt("id", id);
-		net.putString("type",type.type);
+		net.putString("type",type.id());
 
 		blocks.forEach((pos, entry) -> {
 			NbtCompound tag = new NbtCompound();
@@ -202,7 +211,7 @@ public class Network {
 				byte meta = tag.getByte("meta");
 				net.blocks.put(new Vec3i(x, y, z), new BlockEntry(block, meta));
 				if(NetworkManager.canBeNet(block)){
-					net.networkBlocks.put(new Vec3i(x, y, z), (NetworkComponent) block);
+					net.networkBlocks.put(new Vec3i(x, y, z), (INetworkComponent) block);
 				}
 			}
 		}
@@ -242,13 +251,13 @@ public class Network {
 	public void update() {
 		networkBlocks.forEach((pos, networkComponent) -> {
 			BlockEntity tile = world.getBlockEntity(pos.getX(), pos.getY(), pos.getZ());
-			if(tile instanceof NetworkComponentTile){
-				((NetworkComponentTile) tile).networkChanged(this);
+			if(tile instanceof INetworkComponentTile){
+				((INetworkComponentTile) tile).networkChanged(this);
 			}
 		});
 	}
 
-	public boolean isOfSameType(NetworkComponent component){
+	public boolean isOfSameType(INetworkComponent component){
 		return component.getType().equals(type);
 	}
 
