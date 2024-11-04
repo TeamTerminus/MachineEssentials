@@ -4,9 +4,9 @@ import com.llamalad7.mixinextras.lib.apache.commons.ArrayUtils;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
+import net.modificationstation.stationapi.api.util.math.Vec3i;
 import net.teamterminus.machineessentials.MachineEssentials;
 import net.teamterminus.machineessentials.util.IConduitTile;
-import net.teamterminus.machineessentials.util.Vec3i;
 
 
 import java.util.*;
@@ -39,7 +39,7 @@ public class NetworkWalker<T extends NetworkComponentTile> {
 	}
 
 	public static <T extends NetworkComponentTile> List<NetworkPath> createNetworkPaths(World world, Vec3i source){
-		if(source.getTileEntity(world) instanceof NetworkComponentTile){
+		if(world.getBlockEntity(source.getX(), source.getY(), source.getZ()) instanceof NetworkComponentTile){
 			NetworkWalker<T> walker = new NetworkWalker<>(world,source,1,new ArrayList<>());
 			walker.traverse();
 			return walker.isFailed() ? null : walker.routes;
@@ -121,7 +121,7 @@ public class NetworkWalker<T extends NetworkComponentTile> {
 		nextConduitDirections.clear();
 		nextConduits.clear();
 		if(currentConduit == null){
-			BlockEntity thisConduit = world.getBlockEntity(currentPos.x, currentPos.y, currentPos.z);
+			BlockEntity thisConduit = world.getBlockEntity(currentPos.getX(), currentPos.getY(), currentPos.getZ());
 			if(!(thisConduit instanceof IConduitTile)){
 				return false;
 			}

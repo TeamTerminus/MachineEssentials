@@ -8,8 +8,8 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.util.math.Vec3i;
 import net.teamterminus.machineessentials.MachineEssentials;
-import net.teamterminus.machineessentials.util.Vec3i;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -97,7 +97,7 @@ public class Network {
 		List<Vec3i> sideNets = new ArrayList<>(6);
 		for (byte i = 0; i < 6; i++) {
 			Vec3i offset = OFFSETS[i];
-			Vec3i side = new Vec3i(x + offset.x, y + offset.y, z + offset.z);
+			Vec3i side = new Vec3i(x + offset.getX(), y + offset.getY(), z + offset.getZ());
 			if (blocks.containsKey(side)) {
 				sideNets.add(side);
 			}
@@ -135,7 +135,7 @@ public class Network {
 				NetworkComponent netBlock = networkBlocks.get(blockPos);
 				if (netBlock != null) {
 					sideNet.networkBlocks.put(blockPos, netBlock);
-					BlockEntity tile = world.getBlockEntity(blockPos.x, blockPos.y, blockPos.z);
+					BlockEntity tile = world.getBlockEntity(blockPos.getX(), blockPos.getY(), blockPos.getZ());
 					if(tile instanceof NetworkComponentTile){
 						((NetworkComponentTile) tile).networkChanged(sideNet);
 					}
@@ -157,7 +157,7 @@ public class Network {
 			networkBlocks.putAll(net.networkBlocks);
 		}
 		networkBlocks.forEach((pos, networkComponent) -> {
-			BlockEntity tile = world.getBlockEntity(pos.x, pos.y, pos.z);
+			BlockEntity tile = world.getBlockEntity(pos.getX(), pos.getY(), pos.getZ());
 			if(tile instanceof NetworkComponentTile){
 				((NetworkComponentTile) tile).networkChanged(net);
 			}
@@ -174,9 +174,9 @@ public class Network {
 
 		blocks.forEach((pos, entry) -> {
 			NbtCompound tag = new NbtCompound();
-			tag.putInt("x", pos.x);
-			tag.putInt("y", pos.y);
-			tag.putInt("z", pos.z);
+			tag.putInt("x", pos.getX());
+			tag.putInt("y", pos.getY());
+			tag.putInt("z", pos.getZ());
 			tag.putInt("id", entry.block.id);
 			tag.putInt("meta", entry.meta);
 			positions.add(tag);
@@ -225,7 +225,7 @@ public class Network {
 			oldEdge.forEach(pos -> {
 				for (byte i = 0; i < 6; i++) {
 					Vec3i offset = OFFSETS[i];
-					Vec3i side = new Vec3i(pos.x + offset.x, pos.y + offset.y, pos.z + offset.z);
+					Vec3i side = new Vec3i(pos.getX() + offset.getX(), pos.getY() + offset.getY(), pos.getZ() + offset.getZ());
 					if (blocks.containsKey(side) && !result.contains(side)) {
 						newEdge.add(side);
 					}
@@ -241,7 +241,7 @@ public class Network {
 
 	public void update() {
 		networkBlocks.forEach((pos, networkComponent) -> {
-			BlockEntity tile = world.getBlockEntity(pos.x, pos.y, pos.z);
+			BlockEntity tile = world.getBlockEntity(pos.getX(), pos.getY(), pos.getZ());
 			if(tile instanceof NetworkComponentTile){
 				((NetworkComponentTile) tile).networkChanged(this);
 			}

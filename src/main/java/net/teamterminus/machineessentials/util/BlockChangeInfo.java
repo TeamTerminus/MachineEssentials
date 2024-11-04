@@ -3,6 +3,7 @@ package net.teamterminus.machineessentials.util;
 
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.BlockState;
+import net.modificationstation.stationapi.api.util.math.Vec3i;
 
 public class BlockChangeInfo {
 

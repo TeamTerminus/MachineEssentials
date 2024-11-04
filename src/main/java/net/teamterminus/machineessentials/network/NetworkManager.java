@@ -9,10 +9,9 @@ import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.States;
 import net.modificationstation.stationapi.api.event.world.BlockSetEvent;
 import net.modificationstation.stationapi.api.event.world.WorldEvent;
-import net.modificationstation.stationapi.api.event.world.WorldPropertiesEvent;
+import net.modificationstation.stationapi.api.util.math.Vec3i;
 import net.modificationstation.stationapi.api.world.StationFlatteningWorld;
 import net.teamterminus.machineessentials.util.BlockChangeInfo;
-import net.teamterminus.machineessentials.util.Vec3i;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -77,9 +76,9 @@ public class NetworkManager {
 	}
 
 	public static void addBlock(BlockChangeInfo blockChanged) {
-		int x = blockChanged.pos.x;
-		int y = blockChanged.pos.y;
-		int z = blockChanged.pos.z;
+		int x = blockChanged.pos.getX();
+		int y = blockChanged.pos.getY();
+		int z = blockChanged.pos.getZ();
 		World world = blockChanged.world;
 
 		if(!canBeNet(blockChanged.state.getBlock())) {
@@ -93,9 +92,9 @@ public class NetworkManager {
 		Set<Network> sideNets = new HashSet<>();
 		for (Network net: nets) {
 			for (Vec3i offset: OFFSETS) {
-				int px = x + offset.x;
-				int py = y + offset.y;
-				int pz = z + offset.z;
+				int px = x + offset.getX();
+				int py = y + offset.getY();
+				int pz = z + offset.getZ();
 				if (net.existsOnPos(px, py, pz)) {
 					sideNets.add(net);
 				}
@@ -109,9 +108,9 @@ public class NetworkManager {
 			net = new Network(world,component.getType());
 			net.addBlock(x, y, z);
 			for (Vec3i offset: OFFSETS) {
-				int px = x + offset.x;
-				int py = y + offset.y;
-				int pz = z + offset.z;
+				int px = x + offset.getX();
+				int py = y + offset.getY();
+				int pz = z + offset.getZ();
 				if (canBeNet(world, px, py, pz)) {
 					net.addBlock(px, py, pz);
 				}
@@ -153,9 +152,9 @@ public class NetworkManager {
 			net = new Network(world,component.getType());
 			net.addBlock(x, y, z);
 			for (Vec3i offset: OFFSETS) {
-				int px = x + offset.x;
-				int py = y + offset.y;
-				int pz = z + offset.z;
+				int px = x + offset.getX();
+				int py = y + offset.getY();
+				int pz = z + offset.getZ();
 				if (canBeNet(world, px, py, pz)) {
 					net.addBlock(px, py, pz);
 				}
@@ -167,9 +166,9 @@ public class NetworkManager {
 
 		//add surrounding blocks to net if type matches
 		for (Vec3i offset : OFFSETS) {
-			int px = x + offset.x;
-			int py = y + offset.y;
-			int pz = z + offset.z;
+			int px = x + offset.getX();
+			int py = y + offset.getY();
+			int pz = z + offset.getZ();
 			if (canBeNet(world, px, py, pz) && getNet(world, px, py, pz) == null && net != null) {
 				NetworkComponent sideComponent = (NetworkComponent) world.getBlockState(px, py, pz).getBlock();
 				if(net.isOfSameType(sideComponent)){
@@ -180,9 +179,9 @@ public class NetworkManager {
 	}
 
 	public static void removeBlock(BlockChangeInfo blockChanged) {
-		int x = blockChanged.pos.x;
-		int y = blockChanged.pos.y;
-		int z = blockChanged.pos.z;
+		int x = blockChanged.pos.getX();
+		int y = blockChanged.pos.getY();
+		int z = blockChanged.pos.getZ();
 		World world = blockChanged.world;
 		Set<Network> nets = NETS.get(world.dimension.id);
 
