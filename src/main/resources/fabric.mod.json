@@ -13,13 +13,13 @@
     "sources": "https://github.com/calmilamsy/stationapi-example-mod"
   },
 
-  "license": "CC0-1.0",
+  "license": "MIT",
   "icon": "assets/machineessentials/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "stationapi:event_bus": [
-      "net.teamterminus.machineessentials.events.init.InitListener",
+      "net.teamterminus.machineessentials.MachineEssentials",
       "net.teamterminus.machineessentials.network.NetworkManager"
     ],
     "stationapi:event_bus_client": [

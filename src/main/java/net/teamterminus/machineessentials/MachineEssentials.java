@@ -1,6 +1,8 @@
 package net.teamterminus.machineessentials;
 
 import com.mojang.datafixers.util.Pair;
+import net.mine_diver.unsafeevents.listener.EventListener;
+import net.modificationstation.stationapi.api.event.mod.InitEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.util.Namespace;
 import net.modificationstation.stationapi.api.util.Null;
@@ -18,6 +20,11 @@ public class MachineEssentials {
 
     @Entrypoint.Instance
     public static final MachineEssentials INSTANCE = Null.get();
+
+    @EventListener
+    private static void init(InitEvent event) {
+        LOGGER.info("Machine Essentials initialized.");
+    }
 
     public static <K,V> Map<K,V> mapOf(K[] keys, V[] values){
         if(keys.length != values.length){
