@@ -5,7 +5,7 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 import net.teamterminus.machineessentials.MachineEssentials;
 import net.teamterminus.machineessentials.energy.electric.api.IElectric;
 import net.teamterminus.machineessentials.energy.electric.api.IElectricWire;
-import net.teamterminus.machineessentials.network.INetworkComponentTile;
+import net.teamterminus.machineessentials.network.INetworkComponent;
 import net.teamterminus.machineessentials.network.NetworkPath;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,8 +40,8 @@ public abstract class ElectricDeviceBlockEntity extends ElectricBlockEntity {
         }
         long remainingCapacity = getCapacityRemaining();
         long willUseAmps = 0;
-        BlockEntity tile = MachineEssentials.getBlockEntity(dir, world, this);
-        if(tile instanceof IElectricWire wire) {
+        BlockEntity blockEntity = MachineEssentials.getBlockEntity(dir, world, this);
+        if(blockEntity instanceof IElectricWire wire) {
             //for every known path
             for (NetworkPath path : energyNet.getPathData(wire.getPosition())) {
                 long pathLoss = 0;
@@ -58,7 +58,7 @@ public abstract class ElectricDeviceBlockEntity extends ElectricBlockEntity {
                         long voltage = dest.getMaxOutputVoltage();
                         amperage = Math.min(amperage, (dest.getMaxOutputAmperage() - dest.getAmpsCurrentlyUsed()));
                         //calculate path loss
-                        for (INetworkComponentTile component : path.path) {
+                        for (INetworkComponent component : path.path) {
                             if(component instanceof IElectricWire pathWire){
                                 pathLoss += pathWire.getProperties().material().lossPerBlock();
                             }
@@ -71,8 +71,8 @@ public abstract class ElectricDeviceBlockEntity extends ElectricBlockEntity {
                         long pathVoltage = voltage - pathLoss;
                         boolean pathBroken = false;
                         //handle wires with insufficient voltage rating
-                        for (INetworkComponentTile pathTile : path.path) {
-                            if(pathTile instanceof IElectricWire pathWire){
+                        for (INetworkComponent pathBlockEntity : path.path) {
+                            if(pathBlockEntity instanceof IElectricWire pathWire){
                                 if(pathWire.getVoltageRating() < voltage){
                                     pathWire.onOvervoltage(voltage);
                                     pathBroken = true;
@@ -97,8 +97,8 @@ public abstract class ElectricDeviceBlockEntity extends ElectricBlockEntity {
                                     if(dest.getEnergy() >= willUseEnergy){
 
                                         //set current in wires
-                                        for (INetworkComponentTile pathTile : path.path) {
-                                            if (pathTile instanceof IElectricWire pathWire) {
+                                        for (INetworkComponent pathBlockEntity : path.path) {
+                                            if (pathBlockEntity instanceof IElectricWire pathWire) {
                                                 long voltageTraveled = voltage;
                                                 voltageTraveled -= pathWire.getProperties().material().lossPerBlock();
                                                 if (voltageTraveled <= 0) break;

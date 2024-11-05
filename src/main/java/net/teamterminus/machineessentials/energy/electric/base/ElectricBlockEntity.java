@@ -1,6 +1,5 @@
 package net.teamterminus.machineessentials.energy.electric.base;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -9,13 +8,13 @@ import net.teamterminus.machineessentials.MachineEssentials;
 import net.teamterminus.machineessentials.energy.electric.api.IElectric;
 import net.teamterminus.machineessentials.energy.electric.api.IVoltageTiered;
 import net.teamterminus.machineessentials.energy.electric.api.VoltageTier;
-import net.teamterminus.machineessentials.network.INetworkComponentTile;
+import net.teamterminus.machineessentials.network.INetworkComponent;
 import net.teamterminus.machineessentials.network.Network;
 import net.teamterminus.machineessentials.network.NetworkType;
 import net.teamterminus.machineessentials.util.AveragingCounter;
 import net.teamterminus.machineessentials.util.IBlockEntityInit;
 
-public abstract class ElectricBlockEntity extends BlockEntity implements IBlockEntityInit, INetworkComponentTile, IVoltageTiered, IElectric {
+public abstract class ElectricBlockEntity extends BlockEntity implements IBlockEntityInit, INetworkComponent, IVoltageTiered, IElectric {
 
     /**
      * Prefer using getEnergy() instead when possible, this field might not always represent the real energy level!

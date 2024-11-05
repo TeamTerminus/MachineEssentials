@@ -1,8 +1,8 @@
 package net.teamterminus.machineessentials.energy.electric.api;
 
-import net.teamterminus.machineessentials.network.INetworkComponentTile;
+import net.teamterminus.machineessentials.network.INetworkComponent;
 
-public interface IElectricWire extends INetworkComponentTile {
+public interface IElectricWire extends INetworkComponent {
 	/**
 	 * @return The maximum voltage rating of this wire
 	 */

@@ -92,7 +92,7 @@ public class NetworkManager {
 			return;
 		}
 
-		INetworkComponent component = (INetworkComponent) blockChanged.state.getBlock();
+		INetworkComponentBlock component = (INetworkComponentBlock) blockChanged.state.getBlock();
 
 		Set<Network> nets = NETS.computeIfAbsent(world.dimension.id, i -> new HashSet<>());
 
@@ -178,7 +178,7 @@ public class NetworkManager {
 			int py = y + offset.getY();
 			int pz = z + offset.getZ();
 			if (canBeNet(world, px, py, pz) && getNet(world, px, py, pz) == null && net != null) {
-				INetworkComponent sideComponent = (INetworkComponent) world.getBlockState(px, py, pz).getBlock();
+				INetworkComponentBlock sideComponent = (INetworkComponentBlock) world.getBlockState(px, py, pz).getBlock();
 				if(net.isOfSameType(sideComponent)){
 					net.addBlock(px, py, pz);
 				}
@@ -278,7 +278,7 @@ public class NetworkManager {
 	}
 
 	public static boolean canBeNet(Block block) {
-		return block instanceof INetworkComponent;
+		return block instanceof INetworkComponentBlock;
 	}
 
 	private static Network getNet(World world, int x, int y, int z) {
