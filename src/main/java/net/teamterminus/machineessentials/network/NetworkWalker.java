@@ -17,7 +17,7 @@ import java.util.*;
  * This class uses <code>INetworkWire</code> to differentiate between the medium (wires) and endpoints (devices) of a network to build paths.
  * @param <T> Any type that extends <code>INetworkComponent</code>
  */
-public class NetworkWalker<T extends INetworkComponent> {
+public class NetworkWalker<T extends NetworkComponent> {
 
 	protected NetworkWalker<T> root;
 	protected final World world;
@@ -46,8 +46,8 @@ public class NetworkWalker<T extends INetworkComponent> {
 		this.routes = routes;
 	}
 
-	public static <T extends INetworkComponent> List<NetworkPath> createNetworkPaths(World world, Vec3i source){
-		if(world.getBlockEntity(source.getX(), source.getY(), source.getZ()) instanceof INetworkComponent){
+	public static <T extends NetworkComponent> List<NetworkPath> createNetworkPaths(World world, Vec3i source){
+		if(world.getBlockEntity(source.getX(), source.getY(), source.getZ()) instanceof NetworkComponent){
 			NetworkWalker<T> walker = new NetworkWalker<>(world,source,1,new ArrayList<>());
 			walker.traverse();
 			return walker.isFailed() ? null : walker.routes;
@@ -137,7 +137,7 @@ public class NetworkWalker<T extends INetworkComponent> {
 		nextConduits.clear();
 		if(currentConduit == null){
 			BlockEntity thisConduit = world.getBlockEntity(currentPos.getX(), currentPos.getY(), currentPos.getZ());
-			if(!(thisConduit instanceof INetworkWire)){
+			if(!(thisConduit instanceof NetworkWire)){
 				return false;
 			}
 			currentConduit = (T) thisConduit;
@@ -151,7 +151,7 @@ public class NetworkWalker<T extends INetworkComponent> {
 			}
 
 			BlockEntity blockEntity = MachineEssentials.getBlockEntity(direction, world, (BlockEntity) currentConduit);
-			if(blockEntity instanceof INetworkWire){
+			if(blockEntity instanceof NetworkWire){
 				T otherConduit = (T) blockEntity;
 				if(!(otherConduit.isConnected(direction.getOpposite())) || isWalked(otherConduit)){
 					continue;
@@ -169,10 +169,10 @@ public class NetworkWalker<T extends INetworkComponent> {
 
 	protected void checkNeighbour(T conduit, Vec3i pos, Direction dirToNeighbour, BlockEntity neighbour){
 		if(conduit != conduits[conduits.length -1]) throw new IllegalStateException("Current conduit is not the last one added, you dun goofed.");
-		if(!(neighbour instanceof INetworkWire) && neighbour.getBlock() instanceof INetworkComponentBlock){
-			INetworkComponent[] path = new INetworkComponent[conduits.length+1];
+		if(!(neighbour instanceof NetworkWire) && neighbour.getBlock() instanceof NetworkComponentBlock){
+			NetworkComponent[] path = new NetworkComponent[conduits.length+1];
 			System.arraycopy(conduits, 0, path, 0, conduits.length);
-			path[path.length-1] = (INetworkComponent) neighbour;
+			path[path.length-1] = (NetworkComponent) neighbour;
 			routes.add(new NetworkPath(dirToNeighbour, path, getWalkedBlocks()));
 		}
 	}

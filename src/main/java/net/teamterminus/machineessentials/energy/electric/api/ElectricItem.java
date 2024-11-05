@@ -2,7 +2,7 @@ package net.teamterminus.machineessentials.energy.electric.api;
 
 import net.minecraft.item.ItemStack;
 
-public interface IElectricItem {
+public interface ElectricItem {
 
 	/**
 	 * @return Amount of energy currently available in item
@@ -16,7 +16,7 @@ public interface IElectricItem {
 	/**
 	 * @return Amount of unused capacity left
 	 */
-	default long getCapacityRemaining(ItemStack stack) {
+	default long getRemainingCapacity(ItemStack stack) {
 		return getCapacity(stack) - getEnergy(stack);
 	}
 

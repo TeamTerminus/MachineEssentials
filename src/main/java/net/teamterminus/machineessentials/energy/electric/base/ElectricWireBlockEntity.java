@@ -5,15 +5,15 @@ import net.minecraft.block.entity.BlockEntity;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.api.util.math.Vec3i;
 import net.teamterminus.machineessentials.MachineEssentials;
-import net.teamterminus.machineessentials.energy.electric.api.IElectric;
-import net.teamterminus.machineessentials.energy.electric.api.IElectricWire;
+import net.teamterminus.machineessentials.energy.electric.api.Electric;
+import net.teamterminus.machineessentials.energy.electric.api.ElectricWire;
 import net.teamterminus.machineessentials.energy.electric.api.WireProperties;
 import net.teamterminus.machineessentials.network.Network;
 import net.teamterminus.machineessentials.network.NetworkType;
 import net.teamterminus.machineessentials.util.AveragingCounter;
-import net.teamterminus.machineessentials.util.IBlockEntityInit;
+import net.teamterminus.machineessentials.util.BlockEntityInit;
 
-public abstract class ElectricWireBlockEntity extends BlockEntity implements IBlockEntityInit, IElectricWire {
+public abstract class ElectricWireBlockEntity extends BlockEntity implements BlockEntityInit, ElectricWire {
 
     public Network energyNet;
     @Getter
@@ -37,7 +37,7 @@ public abstract class ElectricWireBlockEntity extends BlockEntity implements IBl
 
     @Override
     public boolean isConnected(Direction direction) {
-        return MachineEssentials.getBlockEntity(direction,world,this) instanceof IElectric || MachineEssentials.getBlockEntity(direction,world,this) instanceof IElectricWire;
+        return MachineEssentials.getBlockEntity(direction,world,this) instanceof Electric || MachineEssentials.getBlockEntity(direction,world,this) instanceof ElectricWire;
     }
 
     @Override

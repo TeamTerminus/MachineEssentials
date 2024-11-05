@@ -8,7 +8,7 @@ import net.modificationstation.stationapi.api.util.math.Vec3i;
  * <p>
  * Block entities whose blocks implement <code>INetworkComponent</code> should also implement this.
  */
-public interface INetworkComponent extends INetworkComponentBlock {
+public interface NetworkComponent extends NetworkComponentBlock {
 
 	Vec3i getPosition();
 

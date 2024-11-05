@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 //TODO: Possibly use capabilities from Zekromaster's Terminal mod to implement this later...
 
-public interface IElectric {
+public interface Electric {
 	/**
 	 * @param dir Direction to check
 	 * @return <code>true</code> if container can receive energy from <code>dir</code>, <code>false</code> otherwise
@@ -29,7 +29,7 @@ public interface IElectric {
 	/**
 	 * @return Amount of unused capacity left
 	 */
-	default long getCapacityRemaining() {
+	default long getRemainingCapacity() {
 		return getCapacity() - getEnergy();
 	}
 
@@ -66,7 +66,7 @@ public interface IElectric {
 	 * @return Amount of energy actually added
 	 */
 	default long internalAddEnergy(long energy) {
-		return internalChangeEnergy(Math.min(energy,getCapacityRemaining()));
+		return internalChangeEnergy(Math.min(energy, getRemainingCapacity()));
 	}
 
 	/**

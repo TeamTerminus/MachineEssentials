@@ -5,16 +5,16 @@ import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.api.util.math.Vec3i;
 import net.teamterminus.machineessentials.MachineEssentials;
-import net.teamterminus.machineessentials.energy.electric.api.IElectric;
-import net.teamterminus.machineessentials.energy.electric.api.IVoltageTiered;
+import net.teamterminus.machineessentials.energy.electric.api.Electric;
+import net.teamterminus.machineessentials.energy.electric.api.HasVoltageTier;
 import net.teamterminus.machineessentials.energy.electric.api.VoltageTier;
-import net.teamterminus.machineessentials.network.INetworkComponent;
+import net.teamterminus.machineessentials.network.NetworkComponent;
 import net.teamterminus.machineessentials.network.Network;
 import net.teamterminus.machineessentials.network.NetworkType;
 import net.teamterminus.machineessentials.util.AveragingCounter;
-import net.teamterminus.machineessentials.util.IBlockEntityInit;
+import net.teamterminus.machineessentials.util.BlockEntityInit;
 
-public abstract class ElectricBlockEntity extends BlockEntity implements IBlockEntityInit, INetworkComponent, IVoltageTiered, IElectric {
+public abstract class ElectricBlockEntity extends BlockEntity implements BlockEntityInit, NetworkComponent, HasVoltageTier, Electric {
 
     /**
      * Prefer using getEnergy() instead when possible, this field might not always represent the real energy level!
@@ -37,7 +37,7 @@ public abstract class ElectricBlockEntity extends BlockEntity implements IBlockE
 
     @Override
     public VoltageTier getTier() {
-        IVoltageTiered block = (IVoltageTiered) getBlock();
+        HasVoltageTier block = (HasVoltageTier) getBlock();
         return block.getTier();
     }
 
@@ -115,7 +115,7 @@ public abstract class ElectricBlockEntity extends BlockEntity implements IBlockE
 
     @Override
     public boolean isConnected(Direction direction) {
-        return MachineEssentials.getBlockEntity(direction,world,this) instanceof IElectric;
+        return MachineEssentials.getBlockEntity(direction,world,this) instanceof Electric;
     }
 
     @Override
