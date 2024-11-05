@@ -24,13 +24,13 @@ public interface Electric {
 	/**
 	 * @return Maximum energy capacity of the container
 	 */
-	long getCapacity();
+	long getEnergyCapacity();
 
 	/**
 	 * @return Amount of unused capacity left
 	 */
 	default long getRemainingCapacity() {
-		return getCapacity() - getEnergy();
+		return getEnergyCapacity() - getEnergy();
 	}
 
 	/**
@@ -77,6 +77,12 @@ public interface Electric {
 	default long internalRemoveEnergy(long energy) {
 		return internalChangeEnergy(-Math.min(getEnergy(),energy));
 	}
+
+	/**
+	 * Forcefully sets the energy to a specific number, bounds checks should still be respected.
+	 * @param energy Amount of energy to set
+	 */
+	void internalSetEnergy(long energy);
 
 	/**
 	 * @return Average energy gain/loss over the last second, value will be negative if container is losing energy

@@ -48,7 +48,7 @@ public abstract class ElectricBlockEntity extends BlockEntity implements BlockEn
     }
 
     @Override
-    public long getCapacity() {
+    public long getEnergyCapacity() {
         return capacity;
     }
 
@@ -77,6 +77,11 @@ public abstract class ElectricBlockEntity extends BlockEntity implements BlockEn
         averageEnergyTransfer.increment(world,difference);
         energy += difference;
         return difference;
+    }
+
+    @Override
+    public void internalSetEnergy(long energy) {
+        this.energy = energy;
     }
 
     @Override
