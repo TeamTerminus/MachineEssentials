@@ -2,7 +2,7 @@ package net.teamterminus.machineessentials.energy.electric.api;
 
 /**
  * Properties of a material that an electric wire can be made out of.
- * @param langKey
+ * @param translationKey
  * @param color
  * @param defaultAmps
  * @param maxVoltage
@@ -10,7 +10,7 @@ package net.teamterminus.machineessentials.energy.electric.api;
  * @param meltingTemperature
  */
 public record WireMaterial(
-		String langKey,
+		String translationKey,
 		int color,
 		int defaultAmps,
 		VoltageTier maxVoltage,

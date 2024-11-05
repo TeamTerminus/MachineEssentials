@@ -16,7 +16,7 @@ public interface ElectricWire extends NetworkComponent {
 	/**
 	 * Triggered when the current flowing through this wire is higher than it can handle.
 	 */
-	void onOvercurrent();
+	void onOvercurrent(long amps);
 
 	/**
 	 * Triggered when the wire is exposed to higher voltage than it can handle.
