@@ -28,7 +28,7 @@ public class MachineEssentials {
     public static final MachineEssentials INSTANCE = Null.get();
 
     @EventListener
-    private static void init(InitEvent event) {
+    public static void init(InitEvent event) {
         LOGGER.info("Machine Essentials initialized.");
     }
 
