@@ -12,7 +12,7 @@ public interface INetworkComponentTile extends INetworkComponent {
 
 	Vec3i getPosition();
 
-	boolean isntConnected(Direction direction);
+	boolean isConnected(Direction direction);
 
 	void networkChanged(Network network);
 

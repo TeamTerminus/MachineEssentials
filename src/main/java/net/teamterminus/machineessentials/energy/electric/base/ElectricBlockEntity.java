@@ -115,8 +115,8 @@ public abstract class ElectricBlockEntity extends BlockEntity implements IBlockE
     }
 
     @Override
-    public boolean isntConnected(Direction direction) {
-        return !(MachineEssentials.getBlockEntity(direction,world,this) instanceof IElectric);
+    public boolean isConnected(Direction direction) {
+        return MachineEssentials.getBlockEntity(direction,world,this) instanceof IElectric;
     }
 
     @Override

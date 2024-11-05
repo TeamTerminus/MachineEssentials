@@ -36,8 +36,8 @@ public abstract class ElectricWireBlockEntity extends BlockEntity implements IBl
     }
 
     @Override
-    public boolean isntConnected(Direction direction) {
-        return !(MachineEssentials.getBlockEntity(direction,world,this) instanceof IElectric) && !(MachineEssentials.getBlockEntity(direction,world,this) instanceof IElectricWire);
+    public boolean isConnected(Direction direction) {
+        return MachineEssentials.getBlockEntity(direction,world,this) instanceof IElectric || MachineEssentials.getBlockEntity(direction,world,this) instanceof IElectricWire;
     }
 
     @Override
