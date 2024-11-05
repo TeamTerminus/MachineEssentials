@@ -5,17 +5,17 @@ import net.minecraft.client.resource.language.I18n;
 import net.modificationstation.stationapi.api.util.Formatting;
 
 /**
- * Voltage tiers from ULV (8V) to MAX (65535V), with their colors and names.
+ * Voltage tiers from ULV (24V) to IV (22kV+), with their colors and names.
  */
 public enum VoltageTier {
-    ULV("voltage.ulv.name", 1, 8, Formatting.GRAY, 0x555555),
-    LV("voltage.lv.name", 9, 32, Formatting.RED, 0xFF5555),
-    MV("voltage.mv.name", 33, 128, Formatting.GOLD, 0xFFAA00),
-    HV("voltage.hv.name", 129, 512, Formatting.YELLOW, 0xFFFF55),
-    EV("voltage.ev.name", 513, 2048, Formatting.GREEN, 0x55FF55),
-    UV("voltage.uv.name", 2049, 8192, Formatting.AQUA, 0x8C0000),
-    OV("voltage.ov.name", 8193, 32768, Formatting.DARK_PURPLE, 0x8C0000),
-    MAX("voltage.max.name", 32769, 65535, Formatting.LIGHT_PURPLE, 0xFF55FF);
+    ULV("voltage.ulv.name", 1, 24, Formatting.GRAY, 0x555555),
+    LV("voltage.lv.name", 25, 60, Formatting.RED, 0xFF5555),
+    SV("voltage.sv.name", 61, 160, Formatting.GOLD, 0xFFAA00),
+    MV("voltage.mv.name", 161, 280, Formatting.YELLOW, 0xFFFF55),
+    HV("voltage.hv.name", 281, 480, Formatting.GREEN, 0x55FF55),
+    VHV("voltage.vhv.name", 481, 1500, Formatting.AQUA, 0x8C0000),
+    EV("voltage.ev.name", 1501, 22000, Formatting.DARK_PURPLE, 0x8C0000),
+    IV("voltage.iv.name", 22001, Integer.MAX_VALUE, Formatting.LIGHT_PURPLE, 0xFF55FF);
 
     public final String translationKey;
     public final int minVoltage;
