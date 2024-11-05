@@ -10,6 +10,8 @@ import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.block.States;
 import net.modificationstation.stationapi.api.event.world.BlockSetEvent;
 import net.modificationstation.stationapi.api.event.world.WorldEvent;
+import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
+import net.modificationstation.stationapi.api.mod.entrypoint.EventBusPolicy;
 import net.modificationstation.stationapi.api.util.math.Vec3i;
 import net.modificationstation.stationapi.api.world.StationFlatteningWorld;
 
@@ -26,13 +28,14 @@ import static net.teamterminus.machineessentials.network.Network.OFFSETS;
  * Global singleton that manages saving/loading network data, removing/adding blocks from/to networks, merging similar networks together,
  * and splitting disconnected parts of a network.
  */
+@Entrypoint(eventBus = @EventBusPolicy(registerInstance = false))
 public class NetworkManager {
 
 	private static final Map<Integer, Set<Network>> NETS = new HashMap<>();
 	private static final AtomicInteger ID_PROVIDER = new AtomicInteger(0);
 	private static final NetworkManager INSTANCE = new NetworkManager();
 
-	private NetworkManager() {}
+	public NetworkManager() {}
 
 	public static int getNetID(World world, int x, int y, int z) {
 		Network net = getNet(world, x, y, z);
@@ -53,12 +56,12 @@ public class NetworkManager {
 	}
 
 	@EventListener
-	public void initNetsEvent(WorldEvent.Init event) {
-		File file = event.world.getDimensionData().getWorldPropertiesFile("networks");
+	private static void initNetsEvent(WorldEvent.Init event) {
+		File file = event.world.dimensionData.getWorldPropertiesFile("networks");
 		if (file.exists()) {
 			try {
 				NbtCompound tag = NbtIo.readCompressed(new FileInputStream(file));
-				NetworkManager.netsFromTag(World.class.cast(this), tag);
+				NetworkManager.netsFromTag(event.world, tag);
 			}
 			catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -67,11 +70,11 @@ public class NetworkManager {
 	}
 
 	@EventListener
-	public void saveNetsEvent(WorldEvent.Save event) {
+	private static void saveNetsEvent(WorldEvent.Save event) {
 		try {
-			File file = event.world.getDimensionData().getWorldPropertiesFile("networks");
+			File file = event.world.dimensionData.getWorldPropertiesFile("networks");
 			NbtCompound tag = NbtIo.readCompressed(new FileInputStream(file));
-			NetworkManager.netsToTag(World.class.cast(this), tag);
+			NetworkManager.netsToTag(event.world,tag);
 			NbtIo.writeCompressed(tag, new FileOutputStream(file));
 		}
 		catch (FileNotFoundException e) {
