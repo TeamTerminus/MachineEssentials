@@ -3,6 +3,7 @@ package net.teamterminus.machineessentials.network;
 import com.llamalad7.mixinextras.lib.apache.commons.ArrayUtils;
 import lombok.Getter;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.api.util.math.Vec3i;
@@ -150,7 +151,7 @@ public class NetworkWalker<T extends INetworkComponentTile> {
 				continue;
 			}
 
-			BlockEntity tile = world.getBlockEntity(direction.getOffsetX() + ((BlockEntity) currentConduit).x, direction.getOffsetY() + ((BlockEntity) currentConduit).y, direction.getOffsetZ() + ((BlockEntity) currentConduit).z);
+			BlockEntity tile = MachineEssentials.getBlockEntity(direction, world, (BlockEntity) currentConduit);
 			if(tile instanceof INetworkWireTile){
 				T otherConduit = (T) tile;
 				if(otherConduit.isntConnected(direction.getOpposite()) || isWalked(otherConduit)){
