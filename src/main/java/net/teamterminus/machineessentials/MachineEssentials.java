@@ -2,10 +2,16 @@ package net.teamterminus.machineessentials;
 
 import com.mojang.datafixers.util.Pair;
 import net.mine_diver.unsafeevents.listener.EventListener;
+import net.minecraft.block.Block;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.BlockView;
 import net.modificationstation.stationapi.api.event.mod.InitEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.util.Namespace;
 import net.modificationstation.stationapi.api.util.Null;
+import net.modificationstation.stationapi.api.util.math.Direction;
+import net.modificationstation.stationapi.api.world.StationFlatteningWorld;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
@@ -22,7 +28,7 @@ public class MachineEssentials {
     public static final MachineEssentials INSTANCE = Null.get();
 
     @EventListener
-    private static void init(InitEvent event) {
+    public static void init(InitEvent event) {
         LOGGER.info("Machine Essentials initialized.");
     }
 
@@ -92,4 +98,19 @@ public class MachineEssentials {
         return min;
     }
 
+    public static BlockEntity getBlockEntity(Direction dir, BlockView world, BlockEntity origin){
+        return world.getBlockEntity(origin.x + dir.getOffsetX(), origin.y + dir.getOffsetY(), origin.z + dir.getOffsetZ());
+    }
+
+    public static Block getBlock(Direction dir, StationFlatteningWorld world, BlockEntity origin){
+        return world.getBlockState(origin.x + dir.getOffsetX(), origin.y + dir.getOffsetY(), origin.z + dir.getOffsetZ()).getBlock();
+    }
+
+    public static BlockEntity getBlockEntity(Direction dir, BlockView world, BlockPos origin){
+        return world.getBlockEntity(origin.x + dir.getOffsetX(), origin.y + dir.getOffsetY(), origin.z + dir.getOffsetZ());
+    }
+
+    public static Block getBlock(Direction dir, StationFlatteningWorld world, BlockPos origin){
+        return world.getBlockState(origin.x + dir.getOffsetX(), origin.y + dir.getOffsetY(), origin.z + dir.getOffsetZ()).getBlock();
+    }
 }

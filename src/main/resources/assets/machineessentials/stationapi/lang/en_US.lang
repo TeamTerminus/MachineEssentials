@@ -1,1 +1,9 @@
 # @ is a shorthand for the current mod id, which is machineessentials. E.g: tile.@.redclay.name
+voltage.ulv.name=Ultra Low Voltage
+voltage.lv.name=Low Voltage
+voltage.sv.name=Small Voltage
+voltage.mv.name=Medium Voltage
+voltage.hv.name=High Voltage
+voltage.vhv.name=Very High Voltage
+voltage.ev.name=Extreme Voltage
+voltage.iv.name=Insane Voltage

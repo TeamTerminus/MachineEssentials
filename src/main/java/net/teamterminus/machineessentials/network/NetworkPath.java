@@ -8,13 +8,13 @@ import net.modificationstation.stationapi.api.util.math.Direction;
  */
 public class NetworkPath {
 
-	public final INetworkComponentTile target;
+	public final NetworkComponent target;
 	public final Direction targetDirection;
 	@Getter
     public final int distance;
-	public final INetworkComponentTile[] path;
+	public final NetworkComponent[] path;
 
-	public NetworkPath(Direction destDirection, INetworkComponentTile[] path, int distance) {
+	public NetworkPath(Direction destDirection, NetworkComponent[] path, int distance) {
 		this.target = path[path.length - 1];
 		this.targetDirection = destDirection;
 		this.distance = distance;

@@ -27,6 +27,7 @@
     "stationapi:event_bus_server": [
     ]
   },
+  "accessWidener": "machineessentials.accesswidener",
   "mixins": [
     "machineessentials.mixins.json"
   ],

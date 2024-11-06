@@ -8,11 +8,11 @@ import net.modificationstation.stationapi.api.util.math.Vec3i;
  * <p>
  * Block entities whose blocks implement <code>INetworkComponent</code> should also implement this.
  */
-public interface INetworkComponentTile extends INetworkComponent {
+public interface NetworkComponent extends NetworkComponentBlock {
 
 	Vec3i getPosition();
 
-	boolean isntConnected(Direction direction);
+	boolean isConnected(Direction direction);
 
 	void networkChanged(Network network);
 
