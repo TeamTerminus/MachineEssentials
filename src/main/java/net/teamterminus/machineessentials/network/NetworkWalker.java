@@ -14,8 +14,8 @@ import java.util.*;
 /**
  * Travels across a network recording possible paths between its components.
  * <p>
- * This class uses <code>INetworkWire</code> to differentiate between the medium (wires) and endpoints (devices) of a network to build paths.
- * @param <T> Any type that extends <code>INetworkComponent</code>
+ * This class uses <code>NetworkWire</code> to differentiate between the medium (wires) and endpoints (devices) of a network to build paths.
+ * @param <T> Any type that extends <code>NetworkComponent</code>
  */
 public class NetworkWalker<T extends NetworkComponent> {
 
