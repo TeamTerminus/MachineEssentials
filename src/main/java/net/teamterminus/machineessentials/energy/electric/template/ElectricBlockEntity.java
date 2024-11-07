@@ -17,9 +17,10 @@ import net.teamterminus.machineessentials.util.BlockEntityInit;
 public abstract class ElectricBlockEntity extends BlockEntity implements BlockEntityInit, NetworkComponent, HasVoltageTier, Electric {
 
     /**
+     * Only use this directly if you know what you're doing.
      * @see #getEnergy()
      */
-    private long energy = 0;
+    protected long energy = 0;
     /**
      * @see #getEnergyCapacity()
      */
