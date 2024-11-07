@@ -10,10 +10,10 @@ package net.teamterminus.machineessentials.energy.electric.api;
  * @param meltingTemperature
  */
 public record WireMaterial(
-		String translationKey,
-		int color,
-		int defaultAmps,
-		VoltageTier maxVoltage,
-		int lossPerBlock,
-		int meltingTemperature
+        String translationKey,
+        int color,
+        int defaultAmps,
+        VoltageTier maxVoltage,
+        int lossPerBlock,
+        int meltingTemperature
 ) { }

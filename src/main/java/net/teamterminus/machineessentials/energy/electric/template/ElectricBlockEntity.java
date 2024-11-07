@@ -1,4 +1,4 @@
-package net.teamterminus.machineessentials.energy.electric.base;
+package net.teamterminus.machineessentials.energy.electric.template;
 
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -17,11 +17,11 @@ import net.teamterminus.machineessentials.util.BlockEntityInit;
 public abstract class ElectricBlockEntity extends BlockEntity implements BlockEntityInit, NetworkComponent, HasVoltageTier, Electric {
 
     /**
-     * Prefer using getEnergy() instead when possible, this field might not always represent the real energy level!
+     * @see #getEnergy()
      */
-    protected long energy = 0;
+    private long energy = 0;
     /**
-     * Prefer using getCapacity() instead when possible, this field might not always represent the real capacity!
+     * @see #getEnergyCapacity()
      */
     protected long capacity = 0;
 
@@ -73,14 +73,14 @@ public abstract class ElectricBlockEntity extends BlockEntity implements BlockEn
     }
 
     @Override
-    public long internalChangeEnergy(long difference) {
-        averageEnergyTransfer.increment(world,difference);
+    public long adjustEnergy(long difference) {
+        averageEnergyTransfer.increment(world, difference);
         energy += difference;
         return difference;
     }
 
     @Override
-    public void internalSetEnergy(long energy) {
+    public void setEnergy(long energy) {
         this.energy = energy;
     }
 
@@ -96,7 +96,7 @@ public abstract class ElectricBlockEntity extends BlockEntity implements BlockEn
 
     @Override
     public void addAmpsToUse(long amperage) {
-        averageAmpLoad.increment(world,amperage);
+        averageAmpLoad.increment(world, amperage);
         ampsUsing += amperage;
     }
 
@@ -115,12 +115,12 @@ public abstract class ElectricBlockEntity extends BlockEntity implements BlockEn
 
     @Override
     public Vec3i getPosition() {
-        return new Vec3i(x,y,z);
+        return new Vec3i(x, y, z);
     }
 
     @Override
     public boolean isConnected(Direction direction) {
-        return MachineEssentials.getBlockEntity(direction,world,this) instanceof Electric;
+        return MachineEssentials.getBlockEntity(direction, world, this) instanceof Electric;
     }
 
     @Override
@@ -141,7 +141,7 @@ public abstract class ElectricBlockEntity extends BlockEntity implements BlockEn
 
     @Override
     public void writeNbt(NbtCompound tag) {
-        tag.putLong("Energy",energy);
+        tag.putLong("Energy", energy);
         super.writeNbt(tag);
     }
 }

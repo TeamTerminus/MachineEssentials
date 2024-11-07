@@ -1,4 +1,4 @@
-package net.teamterminus.machineessentials.energy.electric.base;
+package net.teamterminus.machineessentials.energy.electric.template;
 
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.NotNull;

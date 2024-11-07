@@ -9,21 +9,22 @@ import org.jetbrains.annotations.NotNull;
  */
 public record NetworkType(@NotNull String id) {
 
-	/**
-	 * Type for a generic simple (RF-style) energy network.
-	 */
-	public static final NetworkType ENERGY = new NetworkType("energy");
-	/**
-	 * Type for a generic electric (Gregtech-style) energy network.
-	 */
-	public static final NetworkType ELECTRIC = new NetworkType("electric");
+    /**
+     * Type for a generic simple (RF-style) energy network.
+     */
+    public static final NetworkType ENERGY = new NetworkType("energy");
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof NetworkType that)) return false;
+    /**
+     * Type for a generic electric (Gregtech-style) energy network.
+     */
+    public static final NetworkType ELECTRIC = new NetworkType("electric");
 
-		return id.equals(that.id);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof NetworkType that)) return false;
+
+        return id.equals(that.id);
+    }
 
 }
