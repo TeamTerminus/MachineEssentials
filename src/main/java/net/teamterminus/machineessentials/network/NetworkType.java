@@ -10,11 +10,6 @@ import org.jetbrains.annotations.NotNull;
 public record NetworkType(@NotNull String id) {
 
     /**
-     * Type for a generic simple (RF-style) energy network.
-     */
-    public static final NetworkType ENERGY = new NetworkType("energy");
-
-    /**
      * Type for a generic electric (Gregtech-style) energy network.
      */
     public static final NetworkType ELECTRIC = new NetworkType("electric");
