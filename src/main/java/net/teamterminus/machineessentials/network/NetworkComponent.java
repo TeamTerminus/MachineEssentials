@@ -6,7 +6,7 @@ import net.modificationstation.stationapi.api.util.math.Vec3i;
 /**
  * Marks a block entity as being able to be an active component of a network.
  * <p>
- * Block entities whose blocks implement <code>INetworkComponent</code> should also implement this.
+ * Block entities whose blocks implement <code>NetworkComponentBlock</code> should also implement this.
  */
 public interface NetworkComponent extends NetworkComponentBlock {
 
