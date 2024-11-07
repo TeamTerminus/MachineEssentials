@@ -14,8 +14,8 @@ import java.util.*;
 /**
  * Travels across a network recording possible paths between its components.
  * <p>
- * This class uses <code>INetworkWire</code> to differentiate between the medium (wires) and endpoints (devices) of a network to build paths.
- * @param <T> Any type that extends <code>INetworkComponent</code>
+ * This class uses <code>NetworkWire</code> to differentiate between the medium (wires) and endpoints (devices) of a network to build paths.
+ * @param <T> Any type that extends <code>NetworkComponent</code>
  */
 public class NetworkWalker<T extends NetworkComponent> {
 
@@ -106,7 +106,7 @@ public class NetworkWalker<T extends NetworkComponent> {
 				currentConduit = nextConduits.get(0);
 				from = nextConduitDirections.get(0).getOpposite();
 				walkedBlocks++;
-				return isntRunning();
+				return isNotRunning();
 			}
 
 			walkers = new ArrayList<>();
@@ -128,7 +128,7 @@ public class NetworkWalker<T extends NetworkComponent> {
 			}
 		}
 
-		return isntRunning() || walkers.isEmpty();
+		return isNotRunning() || walkers.isEmpty();
 	}
 
 
@@ -170,11 +170,13 @@ public class NetworkWalker<T extends NetworkComponent> {
 	protected void checkNeighbour(T conduit, Vec3i pos, Direction dirToNeighbour, BlockEntity neighbour){
 		if(conduit != conduits[conduits.length -1]) throw new IllegalStateException("Current conduit is not the last one added, you dun goofed.");
 		if(!(neighbour instanceof NetworkWire) && neighbour.getBlock() instanceof NetworkComponentBlock){
-			NetworkComponent[] path = new NetworkComponent[conduits.length+1];
-			System.arraycopy(conduits, 0, path, 0, conduits.length);
-			path[path.length-1] = (NetworkComponent) neighbour;
-			routes.add(new NetworkPath(dirToNeighbour, path, getWalkedBlocks()));
-		}
+			if (neighbour instanceof NetworkComponent networkComponent && networkComponent.getType() == conduit.getType()) {
+				NetworkComponent[] path = new NetworkComponent[conduits.length+1];
+				System.arraycopy(conduits, 0, path, 0, conduits.length);
+				path[path.length-1] = networkComponent;
+				routes.add(new NetworkPath(dirToNeighbour, path, getWalkedBlocks()));
+			}
+        }
 	}
 
 	protected boolean isValid(T conduit, T neighbourConduit, Vec3i pos, Direction dirToNeighbour){
@@ -203,7 +205,7 @@ public class NetworkWalker<T extends NetworkComponent> {
 		return this.root == this;
 	}
 
-    public boolean isntRunning() {
+    public boolean isNotRunning() {
 		return !root.running;
 	}
 
