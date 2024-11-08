@@ -27,7 +27,7 @@ public abstract class ElectricDeviceBlockEntity extends ElectricBlockEntity {
         //try to pull max allowed current from any connected side
         for (Direction dir : Direction.values()) {
             BlockEntity be = MachineEssentials.getBlockEntity(dir, world, this);
-            if (be instanceof ElectricWire){
+            if (be instanceof ElectricWire) {
                 receiveEnergy(dir, getMaxInputAmperage());
             }
         }
@@ -35,7 +35,7 @@ public abstract class ElectricDeviceBlockEntity extends ElectricBlockEntity {
 
     @Override
     public long receiveEnergy(@NotNull Direction dir, long amperage) {
-        if (amperage > getMaxInputAmperage()){
+        if (amperage > getMaxInputAmperage()) {
             return 0;
         }
         long remainingCapacity = getRemainingCapacity();
@@ -46,7 +46,7 @@ public abstract class ElectricDeviceBlockEntity extends ElectricBlockEntity {
             for (NetworkPath path : energyNet.getPathData(wire.getPosition())) {
                 long pathLoss = 0;
                 //ignore itself or non-electric components in the path
-                if (path.target == this || !(path.target instanceof Electric dest)){
+                if (path.target == this || !(path.target instanceof Electric dest)) {
                     continue;
                 }
 
@@ -59,11 +59,11 @@ public abstract class ElectricDeviceBlockEntity extends ElectricBlockEntity {
                         amperage = Math.min(amperage, (dest.getMaxOutputAmperage() - dest.getAmpsCurrentlyUsed()));
                         //calculate path loss
                         for (NetworkComponent component : path.path) {
-                            if (component instanceof ElectricWire pathWire){
+                            if (component instanceof ElectricWire pathWire) {
                                 pathLoss += pathWire.getProperties().material().lossPerBlock();
                             }
                         }
-                        if (pathLoss >= voltage){
+                        if (pathLoss >= voltage) {
                             //avoid paths where all energy is lost
                             continue;
                         }
@@ -72,8 +72,8 @@ public abstract class ElectricDeviceBlockEntity extends ElectricBlockEntity {
                         boolean pathBroken = false;
                         //handle wires with insufficient voltage rating
                         for (NetworkComponent pathBlockEntity : path.path) {
-                            if (pathBlockEntity instanceof ElectricWire pathWire){
-                                if (pathWire.getVoltageRating() < voltage){
+                            if (pathBlockEntity instanceof ElectricWire pathWire) {
+                                if (pathWire.getVoltageRating() < voltage) {
                                     pathWire.onOvervoltage(voltage);
                                     pathBroken = true;
                                     pathVoltage = Math.min(pathWire.getVoltageRating(), pathVoltage);
@@ -83,18 +83,18 @@ public abstract class ElectricDeviceBlockEntity extends ElectricBlockEntity {
                         }
                         if (pathBroken) continue;
 
-                        if (pathVoltage > 0){
+                        if (pathVoltage > 0) {
                             //handle device over-voltage
-                            if (pathVoltage > getMaxInputVoltage()){
+                            if (pathVoltage > getMaxInputVoltage()) {
                                 onOvervoltage(pathVoltage);
                                 return Math.max(amperage, getMaxInputAmperage() - ampsUsing); //short circuit amperage
                             }
-                            if (remainingCapacity >= pathVoltage){
+                            if (remainingCapacity >= pathVoltage) {
                                 //calculate real current draw
                                 willUseAmps = Math.min(remainingCapacity / pathVoltage, Math.min(amperage, getMaxInputAmperage() - ampsUsing));
-                                if (willUseAmps > 0){
+                                if (willUseAmps > 0) {
                                     long willUseEnergy = pathVoltage * willUseAmps;
-                                    if (dest.getEnergy() >= willUseEnergy){
+                                    if (dest.getEnergy() >= willUseEnergy) {
 
                                         //set current in wires
                                         for (NetworkComponent pathBlockEntity : path.path) {
