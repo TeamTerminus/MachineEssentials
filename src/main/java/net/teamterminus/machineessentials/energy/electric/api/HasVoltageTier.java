@@ -2,9 +2,9 @@ package net.teamterminus.machineessentials.energy.electric.api;
 
 public interface HasVoltageTier {
 
-	VoltageTier getTier();
+    VoltageTier getTier();
 
-	default VoltageTier getTier(HasVoltageTier block){
-		return block.getTier();
-	}
+    default VoltageTier getTier(HasVoltageTier block){
+        return block.getTier();
+    }
 }

@@ -1,4 +1,4 @@
-package net.teamterminus.machineessentials.energy.electric.base;
+package net.teamterminus.machineessentials.energy.electric.template;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;

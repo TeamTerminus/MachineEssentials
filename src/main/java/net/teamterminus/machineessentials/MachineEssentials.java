@@ -32,19 +32,19 @@ public class MachineEssentials {
         LOGGER.info("Machine Essentials initialized.");
     }
 
-    public static <K,V> Map<K,V> mapOf(K[] keys, V[] values){
-        if(keys.length != values.length){
+    public static <K, V> Map<K, V> mapOf(K[] keys, V[] values){
+        if (keys.length != values.length){
             throw new IllegalArgumentException("Arrays differ in size!");
         }
-        HashMap<K,V> map = new HashMap<>();
+        HashMap<K, V> map = new HashMap<>();
         for (int i = 0; i < keys.length; i++) {
-            map.put(keys[i],values[i]);
+            map.put(keys[i], values[i]);
         }
         return map;
     }
 
-    public static <T,V> T[] arrayFill(T[] array,V value){
-        Arrays.fill(array,value);
+    public static <T, V> T[] arrayFill(T[] array, V value){
+        Arrays.fill(array, value);
         return array;
     }
 
@@ -75,11 +75,11 @@ public class MachineEssentials {
         return new HashSet<>(Arrays.asList(values));
     }
 
-    public static <T,U> List<Pair<T,U>> zip(List<T> first, List<U> second){
-        List<Pair<T,U>> list = new ArrayList<>();
+    public static <T, U> List<Pair<T, U>> zip(List<T> first, List<U> second){
+        List<Pair<T, U>> list = new ArrayList<>();
         List<?> shortest = first.size() < second.size() ? first : second;
         for (int i = 0; i < shortest.size(); i++) {
-            list.add(Pair.of(first.get(i),second.get(i)));
+            list.add(Pair.of(first.get(i), second.get(i)));
         }
         return list;
     }
@@ -91,7 +91,7 @@ public class MachineEssentials {
     public static long multiMin(long... values){
         long min = Long.MAX_VALUE;
         for (long value : values) {
-            if(value < min){
+            if (value < min){
                 min = value;
             }
         }

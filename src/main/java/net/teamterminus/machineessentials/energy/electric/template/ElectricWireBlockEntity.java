@@ -1,7 +1,6 @@
-package net.teamterminus.machineessentials.energy.electric.base;
+package net.teamterminus.machineessentials.energy.electric.template;
 
 import lombok.Getter;
-import lombok.Setter;
 import net.minecraft.block.entity.BlockEntity;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.api.util.math.Vec3i;
@@ -31,12 +30,12 @@ public abstract class ElectricWireBlockEntity extends BlockEntity implements Blo
 
     @Override
     public Vec3i getPosition() {
-        return new Vec3i(x,y,z);
+        return new Vec3i(x, y, z);
     }
 
     @Override
     public boolean isConnected(Direction direction) {
-        return MachineEssentials.getBlockEntity(direction,world,this) instanceof Electric || MachineEssentials.getBlockEntity(direction,world,this) instanceof ElectricWire;
+        return MachineEssentials.getBlockEntity(direction, world, this) instanceof Electric || MachineEssentials.getBlockEntity(direction, world, this) instanceof ElectricWire;
     }
 
     @Override
@@ -58,7 +57,7 @@ public abstract class ElectricWireBlockEntity extends BlockEntity implements Blo
 
     @Override
     public void incrementAmperage(long amps){
-        averageAmpLoad.increment(world,amps);
+        averageAmpLoad.increment(world, amps);
         int dif = (int) (averageAmpLoad.getLast(world) - getAmpRating());
         if (dif > 0) {
             onOvercurrent(averageAmpLoad.getLast(world));

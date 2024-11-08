@@ -6,5 +6,4 @@ package net.teamterminus.machineessentials.network;
  * This interface should be used on any block entity whose purpose is make paths between other block entities in a network.
  */
 public interface NetworkWire extends NetworkComponent {
-
 }

@@ -10,11 +10,11 @@ import net.modificationstation.stationapi.api.util.math.Vec3i;
  */
 public interface NetworkComponent extends NetworkComponentBlock {
 
-	Vec3i getPosition();
+    Vec3i getPosition();
 
-	boolean isConnected(Direction direction);
+    boolean isConnected(Direction direction);
 
-	void networkChanged(Network network);
+    void networkChanged(Network network);
 
-	void removedFromNetwork(Network network);
+    void removedFromNetwork(Network network);
 }

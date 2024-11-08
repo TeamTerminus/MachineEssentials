@@ -8,8 +8,8 @@ package net.teamterminus.machineessentials.energy.electric.api;
  * @param material
  */
 public record WireProperties(
-		int size,
-		boolean insulated,
-		boolean superconductor,
-		WireMaterial material
+        int size,
+        boolean insulated,
+        boolean superconductor,
+        WireMaterial material
 ) { }
