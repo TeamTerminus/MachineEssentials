@@ -146,7 +146,7 @@ public class NetworkWalker<T extends NetworkComponent> {
         root.walkedConduits.add(currentConduit);
 
         for (Direction direction : getAllowedDirections()) {
-            if (direction == from || !(currentConduit.isConnected(direction))) {
+            if (direction == from || !currentConduit.isConnected(direction)) {
                 continue;
             }
 
