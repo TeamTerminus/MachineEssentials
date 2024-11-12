@@ -58,26 +58,26 @@ public class NetworkManager {
 
     @EventListener
     private static void initNetsEvent(WorldEvent.Init event) {
-        File file = event.world.dimensionData.getWorldPropertiesFile("networks_"+event.world.dimension.id);
-        if (file.exists()) {
-            try {
-                NbtCompound tag = NbtIo.readCompressed(new FileInputStream(file));
-                NetworkManager.netsFromTag(event.world, tag);
-            }
-            catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+        File file = event.world.dimensionData.getWorldPropertiesFile("networks_" + event.world.dimension.id);
+        if (!file.exists()) return;
+        
+        try {
+            NbtCompound tag = NbtIo.readCompressed(new FileInputStream(file));
+            NetworkManager.netsFromTag(event.world, tag);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
     @EventListener
     private static void saveNetsEvent(WorldEvent.Save event) {
-        File file = event.world.dimensionData.getWorldPropertiesFile("networks_"+event.world.dimension.id);
+        File file = event.world.dimensionData.getWorldPropertiesFile("networks_" + event.world.dimension.id);
         NbtCompound tag = new NbtCompound();
+        
         try {
             tag = NbtIo.readCompressed(new FileInputStream(file));
         } catch (FileNotFoundException ignored) {
-            MachineEssentials.LOGGER.info("Creating new networks file for dimension {}!",event.world.dimension.id);
+            MachineEssentials.LOGGER.info("Creating new networks file for dimension {}!", event.world.dimension.id);
         }
         NetworkManager.netsToTag(event.world, tag);
         try {
