@@ -14,6 +14,7 @@ import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.mod.entrypoint.EventBusPolicy;
 import net.modificationstation.stationapi.api.util.math.Vec3i;
 import net.modificationstation.stationapi.api.world.StationFlatteningWorld;
+import net.teamterminus.machineessentials.MachineEssentials;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,29 +58,34 @@ public class NetworkManager {
 
     @EventListener
     private static void initNetsEvent(WorldEvent.Init event) {
-        File file = event.world.dimensionData.getWorldPropertiesFile("networks");
-        if (file.exists()) {
-            try {
-                NbtCompound tag = NbtIo.readCompressed(new FileInputStream(file));
-                NetworkManager.netsFromTag(event.world, tag);
-            }
-            catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+        File file = event.world.dimensionData.getWorldPropertiesFile("networks_" + event.world.dimension.id);
+        if (!file.exists()) return;
+        
+        try {
+            NbtCompound tag = NbtIo.readCompressed(new FileInputStream(file));
+            NetworkManager.netsFromTag(event.world, tag);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
     @EventListener
     private static void saveNetsEvent(WorldEvent.Save event) {
+        File file = event.world.dimensionData.getWorldPropertiesFile("networks_" + event.world.dimension.id);
+        NbtCompound tag = new NbtCompound();
+        
         try {
-            File file = event.world.dimensionData.getWorldPropertiesFile("networks");
-            NbtCompound tag = NbtIo.readCompressed(new FileInputStream(file));
-            NetworkManager.netsToTag(event.world, tag);
-            NbtIo.writeCompressed(tag, new FileOutputStream(file));
+            tag = NbtIo.readCompressed(new FileInputStream(file));
+        } catch (FileNotFoundException ignored) {
+            MachineEssentials.LOGGER.info("Creating new networks file for dimension {}!", event.world.dimension.id);
         }
-        catch (FileNotFoundException e) {
+        NetworkManager.netsToTag(event.world, tag);
+        try {
+            NbtIo.writeCompressed(tag, new FileOutputStream(file));
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
     }
 
     public static void addBlock(BlockChangeInfo blockChanged) {
