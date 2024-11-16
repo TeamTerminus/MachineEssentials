@@ -48,7 +48,7 @@ public class NetworkManager {
     }
 
     @EventListener
-    public void blockChanged(BlockSetEvent event) {
+    public static void blockChanged(BlockSetEvent event) {
         if (event.blockState == States.AIR.get()){
             removeBlock(new BlockChangeInfo(event.world, new Vec3i(event.x, event.y, event.z), event.blockState, event.blockMeta));
         } else {

@@ -215,6 +215,8 @@ public class Network {
             }
         }
 
+        net.update();
+
         return net;
     }
 
