@@ -20,7 +20,10 @@
   "entrypoints": {
     "stationapi:event_bus": [
       "net.teamterminus.machineessentials.MachineEssentials",
-      "net.teamterminus.machineessentials.network.NetworkManager"
+      "net.teamterminus.machineessentials.network.NetworkManager",
+      "net.teamterminus.machineessentials.event.BlockEntityListener",
+      "net.teamterminus.machineessentials.event.BlockListener",
+      "net.teamterminus.machineessentials.event.ScreenHandlerListener"
     ],
     "stationapi:event_bus_client": [
     ],

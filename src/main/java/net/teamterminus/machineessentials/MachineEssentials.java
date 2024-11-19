@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 import net.modificationstation.stationapi.api.event.mod.InitEvent;
@@ -12,6 +13,8 @@ import net.modificationstation.stationapi.api.util.Namespace;
 import net.modificationstation.stationapi.api.util.Null;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.api.world.StationFlatteningWorld;
+import net.teamterminus.machineessentials.fluid.core.Fluid;
+import net.teamterminus.machineessentials.fluid.core.FluidStack;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
@@ -29,6 +32,7 @@ public class MachineEssentials {
 
     @EventListener
     public static void init(InitEvent event) {
+        Fluid.init();
         LOGGER.info("Machine Essentials initialized.");
     }
 
@@ -112,5 +116,35 @@ public class MachineEssentials {
 
     public static Block getBlock(Direction dir, StationFlatteningWorld world, BlockPos origin){
         return world.getBlockState(origin.x + dir.getOffsetX(), origin.y + dir.getOffsetY(), origin.z + dir.getOffsetZ()).getBlock();
+    }
+
+    public static ArrayList<ItemStack> condenseList(List<ItemStack> list){
+        ArrayList<ItemStack> stacks = new ArrayList<>();
+        for (ItemStack stack : list) {
+            if(stack != null){
+                Optional<ItemStack> existing = stacks.stream().filter((S) -> S.isItemEqual(stack)).findAny();
+                if (existing.isPresent()) {
+                    existing.get().count += stack.count;
+                } else {
+                    stacks.add(stack.copy());
+                }
+            }
+        }
+        return stacks;
+    }
+
+    public static ArrayList<FluidStack> condenseFluidList(List<FluidStack> list) {
+        ArrayList<FluidStack> stacks = new ArrayList<>();
+        for (FluidStack stack : list) {
+            if (stack != null) {
+                Optional<FluidStack> existing = stacks.stream().filter((S) -> S.isFluidEqual(stack)).findAny();
+                if (existing.isPresent()) {
+                    existing.get().amount += stack.amount;
+                } else {
+                    stacks.add(stack.copy());
+                }
+            }
+        }
+        return stacks;
     }
 }
