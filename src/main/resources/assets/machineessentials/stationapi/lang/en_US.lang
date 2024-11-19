@@ -7,3 +7,5 @@ voltage.hv.name=High Voltage
 voltage.vhv.name=Very High Voltage
 voltage.ev.name=Extreme Voltage
 voltage.iv.name=Insane Voltage
+
+tile.@.fluid_container.name=Fluid Container

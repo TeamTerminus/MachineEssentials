@@ -8,6 +8,7 @@
   "server": [
   ],
   "client": [
+    "InteractionManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
