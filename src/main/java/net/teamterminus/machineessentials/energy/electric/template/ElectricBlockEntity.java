@@ -8,13 +8,12 @@ import net.teamterminus.machineessentials.MachineEssentials;
 import net.teamterminus.machineessentials.energy.electric.api.Electric;
 import net.teamterminus.machineessentials.energy.electric.api.HasVoltageTier;
 import net.teamterminus.machineessentials.energy.electric.api.VoltageTier;
-import net.teamterminus.machineessentials.network.NetworkComponent;
 import net.teamterminus.machineessentials.network.Network;
+import net.teamterminus.machineessentials.network.NetworkComponent;
 import net.teamterminus.machineessentials.network.NetworkType;
 import net.teamterminus.machineessentials.util.AveragingCounter;
-import net.teamterminus.machineessentials.util.BlockEntityInit;
 
-public abstract class ElectricBlockEntity extends BlockEntity implements BlockEntityInit, NetworkComponent, HasVoltageTier, Electric {
+public abstract class ElectricBlockEntity extends BlockEntity implements NetworkComponent, HasVoltageTier, Electric {
 
     /**
      * Only use this directly if you know what you're doing.

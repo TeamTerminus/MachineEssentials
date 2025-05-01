@@ -11,9 +11,8 @@ import net.teamterminus.machineessentials.energy.electric.api.WireProperties;
 import net.teamterminus.machineessentials.network.Network;
 import net.teamterminus.machineessentials.network.NetworkType;
 import net.teamterminus.machineessentials.util.AveragingCounter;
-import net.teamterminus.machineessentials.util.BlockEntityInit;
 
-public abstract class ElectricWireBlockEntity extends BlockEntity implements BlockEntityInit, ElectricWire {
+public abstract class ElectricWireBlockEntity extends BlockEntity implements ElectricWire {
 
     public Network energyNet;
     @Getter

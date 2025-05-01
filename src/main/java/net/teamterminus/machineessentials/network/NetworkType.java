@@ -1,6 +1,5 @@
 package net.teamterminus.machineessentials.network;
 
-import net.modificationstation.stationapi.api.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 /**

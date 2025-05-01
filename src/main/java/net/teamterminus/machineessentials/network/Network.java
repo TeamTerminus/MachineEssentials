@@ -1,8 +1,6 @@
 package net.teamterminus.machineessentials.network;
 
 import com.google.common.collect.Maps;
-
-
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;

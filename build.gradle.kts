@@ -1,13 +1,11 @@
-import org.gradle.internal.extensions.stdlib.toDefaultLowerCase
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.URI
-import java.net.URL
 
 plugins {
 	id("maven-publish")
-	id("fabric-loom") version "1.8.10"
-	id("babric-loom-extension") version "1.8.9"
+	id("fabric-loom") version "1.9.2"
+	id("babric-loom-extension") version "1.9.4"
 }
 
 //noinspection GroovyUnusedAssignment
@@ -74,7 +72,6 @@ dependencies {
 	modImplementation("net.modificationstation:StationAPI:${project.properties["stapi_version"]}")
 
 	modImplementation("net.glasslauncher.mods:ModMenu:${project.properties["modmenu_version"]}")
-	modImplementation("net.glasslauncher.mods:glass-networking:${project.properties["glassnetworking_version"]}")
 	modImplementation("net.glasslauncher.mods:GlassConfigAPI:${project.properties["gcapi_version"]}")
 	modImplementation("net.glasslauncher.mods:AlwaysMoreItems:${project.properties["alwaysmoreitems_version"]}")
 }

@@ -7,28 +7,27 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 import net.modificationstation.stationapi.api.event.mod.InitEvent;
-import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
+import net.modificationstation.stationapi.api.mod.entrypoint.EntrypointManager;
 import net.modificationstation.stationapi.api.util.Namespace;
-import net.modificationstation.stationapi.api.util.Null;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.api.world.StationFlatteningWorld;
 import org.apache.logging.log4j.Logger;
 
+import java.lang.invoke.MethodHandles;
 import java.util.*;
 
 public class MachineEssentials {
+    static {
+        EntrypointManager.registerLookup(MethodHandles.lookup());
+    }
 
-    @Entrypoint.Namespace
-    public static final Namespace NAMESPACE = Null.get();
+    @SuppressWarnings("UnstableApiUsage")
+    public static final Namespace NAMESPACE = Namespace.resolve();
 
-    @Entrypoint.Logger
-    public static final Logger LOGGER = Null.get();
-
-    @Entrypoint.Instance
-    public static final MachineEssentials INSTANCE = Null.get();
+    public static final Logger LOGGER = NAMESPACE.getLogger("MachineEssentials");
 
     @EventListener
-    public static void init(InitEvent event) {
+    private static void init(InitEvent event) {
         LOGGER.info("Machine Essentials initialized.");
     }
 
