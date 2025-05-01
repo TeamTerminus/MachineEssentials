@@ -50,7 +50,7 @@ public class NetworkManager {
 
     @EventListener
     private void blockChanged(BlockSetEvent event) {
-        if(event.blockState == States.AIR.get()){
+        if (event.blockState == States.AIR.get()){
             removeBlock(new BlockChangeInfo(event.world, new Vec3i(event.x, event.y, event.z), event.blockState, event.blockMeta));
         } else {
             addBlock(new BlockChangeInfo(event.world, new Vec3i(event.x, event.y, event.z), event.blockState, event.blockMeta));
@@ -97,7 +97,7 @@ public class NetworkManager {
         int z = blockChanged.pos.getZ();
         World world = blockChanged.world;
 
-        if(!canBeNet(blockChanged.state.getBlock())) {
+        if (!canBeNet(blockChanged.state.getBlock())) {
             return;
         }
 
@@ -138,7 +138,7 @@ public class NetworkManager {
         }
         else if (size == 1) {
             Network potentialNet = sideNets.stream().findAny().get();
-            if(potentialNet.isOfSameType(component)){
+            if (potentialNet.isOfSameType(component)){
                 potentialNet.addBlock(x, y, z);
                 net = potentialNet;
             }
@@ -147,14 +147,14 @@ public class NetworkManager {
             Network[] netsArray = sideNets.toArray(new Network[size]);
             Network main = null;
             for (Network network : netsArray) {
-                if(network.isOfSameType(component)){
+                if (network.isOfSameType(component)){
                     main = network;
                     main.addBlock(x, y, z);
                     for (Network otherNet : netsArray) {
-                        if(otherNet == main){
+                        if (otherNet == main){
                             continue;
                         }
-                        if(otherNet.isOfSameType(main)){
+                        if (otherNet.isOfSameType(main)){
                             main.mergeNetwork(otherNet);
                             nets.remove(otherNet);
                         }
@@ -165,7 +165,7 @@ public class NetworkManager {
             }
         }
 
-        if(net == null && getNet(world, x, y, z) == null) {
+        if (net == null && getNet(world, x, y, z) == null) {
             net = new Network(world,component.getType());
             net.addBlock(x, y, z);
             for (Vec3i offset: OFFSETS) {
@@ -188,7 +188,7 @@ public class NetworkManager {
             int pz = z + offset.getZ();
             if (canBeNet(world, px, py, pz) && getNet(world, px, py, pz) == null && net != null) {
                 NetworkComponentBlock sideComponent = (NetworkComponentBlock) world.getBlockState(px, py, pz).getBlock();
-                if(net.isOfSameType(sideComponent)){
+                if (net.isOfSameType(sideComponent)){
                     net.addBlock(px, py, pz);
                 }
             }

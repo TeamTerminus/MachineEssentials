@@ -46,7 +46,7 @@ public class NetworkWalker<T extends NetworkComponent> {
     }
 
     public static <T extends NetworkComponent> List<NetworkPath> createNetworkPaths(World world, Vec3i source) {
-        if(world.getBlockEntity(source.getX(), source.getY(), source.getZ()) instanceof NetworkComponent) {
+        if (world.getBlockEntity(source.getX(), source.getY(), source.getZ()) instanceof NetworkComponent) {
             NetworkWalker<T> walker = new NetworkWalker<>(world, source, 1, new ArrayList<>());
             walker.traverse();
             return walker.isFailed() ? null : walker.routes;
@@ -72,7 +72,7 @@ public class NetworkWalker<T extends NetworkComponent> {
      * @param max The maximum amount of blocks to traverse
      */
     public void traverse(int max) {
-        if(used) {
+        if (used) {
             throw new IllegalStateException("Walker already used!");
         }
         root = this;
