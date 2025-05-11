@@ -1,7 +1,8 @@
 package net.teamterminus.machineessentials.energy.electric.api;
 
+
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.resource.language.TranslationStorage;
 import net.modificationstation.stationapi.api.util.Formatting;
 
 /**
@@ -35,7 +36,7 @@ public enum VoltageTier {
     }
 
     public String getName() {
-        return I18n.getTranslation(translationKey);
+        return TranslationStorage.getInstance().getClientTranslation(translationKey);
     }
 
     public static VoltageTier get(int voltage) {

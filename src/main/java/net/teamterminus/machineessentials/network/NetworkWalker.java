@@ -1,12 +1,13 @@
 package net.teamterminus.machineessentials.network;
 
-import com.llamalad7.mixinextras.lib.apache.commons.ArrayUtils;
+
 import lombok.Getter;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.api.util.math.Vec3i;
 import net.teamterminus.machineessentials.MachineEssentials;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.*;
 
@@ -14,6 +15,7 @@ import java.util.*;
  * Travels across a network recording possible paths between its components.
  * <p>
  * This class uses <code>NetworkWire</code> to differentiate between the medium (wires) and endpoints (devices) of a network to build paths.
+ *
  * @param <T> Any type that extends <code>NetworkComponent</code>
  */
 public class NetworkWalker<T extends NetworkComponent> {
@@ -21,8 +23,8 @@ public class NetworkWalker<T extends NetworkComponent> {
     protected NetworkWalker<T> root;
     protected final World world;
     protected Set<T> walkedConduits;
-    protected final List<Direction> nextConduitDirections = new ArrayList<>(Direction.values().length-1);
-    protected final List<T> nextConduits = new ArrayList<>(Direction.values().length-1);
+    protected final List<Direction> nextConduitDirections = new ArrayList<>(Direction.values().length - 1);
+    protected final List<T> nextConduits = new ArrayList<>(Direction.values().length - 1);
     protected List<NetworkWalker<T>> walkers;
     protected Vec3i currentPos;
     protected T currentConduit;
@@ -69,6 +71,7 @@ public class NetworkWalker<T extends NetworkComponent> {
 
     /**
      * Traverse the network until <code>max</code> is reached or there aren't any more valid paths.
+     *
      * @param max The maximum amount of blocks to traverse
      */
     public void traverse(int max) {
@@ -81,7 +84,7 @@ public class NetworkWalker<T extends NetworkComponent> {
         running = true;
         //runs purely on side effects
         //noinspection StatementWithEmptyBody
-        while (running && !walk() && i++ < max);
+        while (running && !walk() && i++ < max) ;
         running = false;
         walkedConduits = null;
         if (i >= max) {
@@ -167,12 +170,13 @@ public class NetworkWalker<T extends NetworkComponent> {
     }
 
     protected void checkNeighbour(T conduit, Vec3i pos, Direction dirToNeighbour, BlockEntity neighbour) {
-        if (conduit != conduits[conduits.length -1]) throw new IllegalStateException("Current conduit is not the last one added, you dun goofed.");
+        if (conduit != conduits[conduits.length - 1])
+            throw new IllegalStateException("Current conduit is not the last one added, you dun goofed.");
         if (!(neighbour instanceof NetworkWire) && neighbour.getBlock() instanceof NetworkComponentBlock) {
             if (neighbour instanceof NetworkComponent networkComponent && networkComponent.getType() == conduit.getType()) {
-                NetworkComponent[] path = new NetworkComponent[conduits.length+1];
+                NetworkComponent[] path = new NetworkComponent[conduits.length + 1];
                 System.arraycopy(conduits, 0, path, 0, conduits.length);
-                path[path.length-1] = networkComponent;
+                path[path.length - 1] = networkComponent;
                 routes.add(new NetworkPath(dirToNeighbour, path, getWalkedBlocks()));
             }
         }
@@ -190,7 +194,8 @@ public class NetworkWalker<T extends NetworkComponent> {
         conduits = ArrayUtils.add(conduits, currentConduit);
     }
 
-    protected void onRemoveSubWalker(NetworkWalker<T> subWalker) {}
+    protected void onRemoveSubWalker(NetworkWalker<T> subWalker) {
+    }
 
     protected boolean isWalked(T conduit) {
         return root.walkedConduits.contains(conduit);

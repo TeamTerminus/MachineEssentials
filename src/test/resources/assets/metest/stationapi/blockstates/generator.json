@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "metest:block/generator"
+    },
+    "facing=east": {
+      "model": "metest:block/generator",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "metest:block/generator",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "metest:block/generator",
+      "y": 270
+    }
+  }
+}

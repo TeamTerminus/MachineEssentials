@@ -2,6 +2,7 @@ package net.teamterminus.machineessentials.energy.electric.api;
 
 /**
  * Properties of a specific type of wire made out of <code>material</code>.
+ *
  * @param size
  * @param insulated
  * @param superconductor
@@ -12,4 +13,5 @@ public record WireProperties(
         boolean insulated,
         boolean superconductor,
         WireMaterial material
-) { }
+) {
+}

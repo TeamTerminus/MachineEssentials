@@ -1,5 +1,6 @@
 package net.teamterminus.machineessentials.energy.electric.template;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -10,13 +11,16 @@ import net.teamterminus.machineessentials.energy.electric.api.HasVoltageTier;
 import net.teamterminus.machineessentials.energy.electric.api.VoltageTier;
 import net.teamterminus.machineessentials.network.Network;
 import net.teamterminus.machineessentials.network.NetworkComponent;
+import net.teamterminus.machineessentials.network.NetworkManager;
 import net.teamterminus.machineessentials.network.NetworkType;
 import net.teamterminus.machineessentials.util.AveragingCounter;
+import net.teamterminus.machineessentials.util.BlockEntityInit;
 
-public abstract class ElectricBlockEntity extends BlockEntity implements NetworkComponent, HasVoltageTier, Electric {
+public abstract class ElectricBlockEntity extends BlockEntity implements NetworkComponent, HasVoltageTier, Electric, BlockEntityInit {
 
     /**
      * Only use this directly if you know what you're doing.
+     *
      * @see #getEnergy()
      */
     protected long energy = 0;
@@ -39,6 +43,11 @@ public abstract class ElectricBlockEntity extends BlockEntity implements Network
     public VoltageTier getTier() {
         HasVoltageTier block = (HasVoltageTier) getBlock();
         return block.getTier();
+    }
+
+    @Override
+    public void init(Block block) {
+        networkChanged(NetworkManager.getNet(world, x, y, z));
     }
 
     //IEnergyContainer

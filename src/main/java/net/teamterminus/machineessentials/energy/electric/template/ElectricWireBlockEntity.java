@@ -1,6 +1,7 @@
 package net.teamterminus.machineessentials.energy.electric.template;
 
 import lombok.Getter;
+import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.api.util.math.Vec3i;
@@ -9,10 +10,12 @@ import net.teamterminus.machineessentials.energy.electric.api.Electric;
 import net.teamterminus.machineessentials.energy.electric.api.ElectricWire;
 import net.teamterminus.machineessentials.energy.electric.api.WireProperties;
 import net.teamterminus.machineessentials.network.Network;
+import net.teamterminus.machineessentials.network.NetworkManager;
 import net.teamterminus.machineessentials.network.NetworkType;
 import net.teamterminus.machineessentials.util.AveragingCounter;
+import net.teamterminus.machineessentials.util.BlockEntityInit;
 
-public abstract class ElectricWireBlockEntity extends BlockEntity implements ElectricWire {
+public abstract class ElectricWireBlockEntity extends BlockEntity implements ElectricWire, BlockEntityInit {
 
     public Network energyNet;
     @Getter
@@ -21,6 +24,14 @@ public abstract class ElectricWireBlockEntity extends BlockEntity implements Ele
     protected long ampRating = 0;
 
     protected AveragingCounter averageAmpLoad = new AveragingCounter();
+
+    @Override
+    public void init(Block block) {
+        networkChanged(NetworkManager.getNet(world, x, y, z));
+        this.properties = ((ElectricWireBlock) block).getProperties();
+        voltageRating = properties.material().maxVoltage().maxVoltage;
+        ampRating = (long) properties.size() * properties.material().defaultAmps();
+    }
 
     @Override
     public NetworkType getType() {
@@ -51,11 +62,14 @@ public abstract class ElectricWireBlockEntity extends BlockEntity implements Ele
     public long getVoltageRating() {
         return voltageRating;
     }
-    @Override
-    public long getAmpRating() {return ampRating;}
 
     @Override
-    public void incrementAmperage(long amps){
+    public long getAmpRating() {
+        return ampRating;
+    }
+
+    @Override
+    public void incrementAmperage(long amps) {
         averageAmpLoad.increment(world, amps);
         int dif = (int) (averageAmpLoad.getLast(world) - getAmpRating());
         if (dif > 0) {
@@ -63,7 +77,7 @@ public abstract class ElectricWireBlockEntity extends BlockEntity implements Ele
         }
     }
 
-    public double getAverageAmpLoad(){
+    public double getAverageAmpLoad() {
         return averageAmpLoad.getAverage(world);
     }
 }

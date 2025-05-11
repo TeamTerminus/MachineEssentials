@@ -1,0 +1,5 @@
+# @ is a shorthand for the current mod id, which is metest. E.g: tile.@.redclay.name
+
+tile.@.wire.name=Test Wire
+tile.@.generator.name=Test Generator
+tile.@.machine.name=Test Machine

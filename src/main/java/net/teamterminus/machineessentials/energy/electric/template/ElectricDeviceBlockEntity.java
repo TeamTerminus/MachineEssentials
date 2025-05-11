@@ -24,6 +24,8 @@ public abstract class ElectricDeviceBlockEntity extends ElectricBlockEntity {
         averageAmpLoad.increment(world, 0);
         averageEnergyTransfer.increment(world, 0);
 
+        if (energyNet == null) return;
+
         //try to pull max allowed current from any connected side
         for (Direction dir : Direction.values()) {
             BlockEntity be = MachineEssentials.getBlockEntity(dir, world, this);
@@ -60,6 +62,7 @@ public abstract class ElectricDeviceBlockEntity extends ElectricBlockEntity {
                         //calculate path loss
                         for (NetworkComponent component : path.path) {
                             if (component instanceof ElectricWire pathWire) {
+                                if (pathWire.getProperties() == null) continue;
                                 pathLoss += pathWire.getProperties().material().lossPerBlock();
                             }
                         }
@@ -73,6 +76,7 @@ public abstract class ElectricDeviceBlockEntity extends ElectricBlockEntity {
                         //handle wires with insufficient voltage rating
                         for (NetworkComponent pathBlockEntity : path.path) {
                             if (pathBlockEntity instanceof ElectricWire pathWire) {
+                                if (pathWire.getProperties() == null) continue;
                                 if (pathWire.getVoltageRating() < voltage) {
                                     pathWire.onOvervoltage(voltage);
                                     pathBroken = true;

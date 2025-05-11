@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Record representing network types, Blocks in networks with differing types won't connect to each other and their networks won't merge.
+ *
  * @param id The type of the network
  */
 public record NetworkType(@NotNull String id) {

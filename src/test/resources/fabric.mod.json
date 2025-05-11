@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "metest",
+  "version": "${version}",
+
+  "name": "Machine Essentials Test Mod",
+  "description": "Test mod for Machine Essentials.",
+  "authors": [
+    "Team Terminus"
+  ],
+  "contact": {
+    "homepage": "https://glass-launcher.net/",
+    "sources": "https://github.com/calmilamsy/stationapi-example-mod"
+  },
+
+  "license": "MIT",
+  "icon": "assets/metest/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "stationapi:event_bus": [
+      "net.teamterminus.metest.METest",
+      "net.teamterminus.metest.energy.electric.event.ElectricBlockEntities",
+      "net.teamterminus.metest.energy.electric.event.ElectricBlocks",
+      "net.teamterminus.metest.energy.electric.event.ElectricItems",
+      "net.teamterminus.metest.energy.electric.event.ElectricScreens",
+      "net.teamterminus.metest.energy.electric.event.ElectricTextures"
+    ],
+    "stationapi:event_bus_client": [
+    ],
+    "stationapi:event_bus_server": [
+    ]
+  },
+  "mixins": [
+    "metest.mixins.json"
+  ],
+
+  "depends": {
+    "minecraft": "1.0.0-beta.7.3"
+  }
+}

@@ -4,7 +4,7 @@ public interface HasVoltageTier {
 
     VoltageTier getTier();
 
-    default VoltageTier getTier(HasVoltageTier block){
+    default VoltageTier getTier(HasVoltageTier block) {
         return block.getTier();
     }
 }

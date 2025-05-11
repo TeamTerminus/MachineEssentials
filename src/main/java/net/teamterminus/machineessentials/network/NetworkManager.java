@@ -1,5 +1,6 @@
 package net.teamterminus.machineessentials.network;
 
+
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
@@ -10,9 +11,7 @@ import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.block.States;
 import net.modificationstation.stationapi.api.event.world.BlockSetEvent;
 import net.modificationstation.stationapi.api.event.world.WorldEvent;
-import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.mod.entrypoint.EntrypointManager;
-import net.modificationstation.stationapi.api.mod.entrypoint.EventBusPolicy;
 import net.modificationstation.stationapi.api.util.math.Vec3i;
 import net.modificationstation.stationapi.api.world.StationFlatteningWorld;
 
@@ -27,7 +26,6 @@ import static net.teamterminus.machineessentials.network.Network.OFFSETS;
  * Global singleton that manages saving/loading network data, removing/adding blocks from/to networks, merging similar networks together,
  * and splitting disconnected parts of a network.
  */
-@Entrypoint(eventBus = @EventBusPolicy(registerInstance = false))
 public class NetworkManager {
     static {
         EntrypointManager.registerLookup(MethodHandles.lookup());
@@ -35,22 +33,18 @@ public class NetworkManager {
 
     private static final Map<Integer, Set<Network>> NETS = new HashMap<>();
     private static final AtomicInteger ID_PROVIDER = new AtomicInteger(0);
-    private static final NetworkManager INSTANCE = new NetworkManager();
 
-    public NetworkManager() {}
+    public NetworkManager() {
+    }
 
     public static int getNetID(World world, int x, int y, int z) {
         Network net = getNet(world, x, y, z);
         return net == null ? -1 : net.hashCode();
     }
 
-    public static NetworkManager getInstance() {
-        return INSTANCE;
-    }
-
     @EventListener
-    private void blockChanged(BlockSetEvent event) {
-        if (event.blockState == States.AIR.get()){
+    private static void blockChanged(BlockSetEvent event) {
+        if (event.blockState == States.AIR.get()) {
             removeBlock(new BlockChangeInfo(event.world, new Vec3i(event.x, event.y, event.z), event.blockState, event.blockMeta));
         } else {
             addBlock(new BlockChangeInfo(event.world, new Vec3i(event.x, event.y, event.z), event.blockState, event.blockMeta));
@@ -64,8 +58,7 @@ public class NetworkManager {
             try {
                 NbtCompound tag = NbtIo.readCompressed(new FileInputStream(file));
                 NetworkManager.netsFromTag(event.world, tag);
-            }
-            catch (FileNotFoundException e) {
+            } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
@@ -79,14 +72,12 @@ public class NetworkManager {
             if (file.exists()) {
                 tag = NbtIo.readCompressed(new FileInputStream(file));
                 NetworkManager.netsToTag(event.world, tag);
-            }
-            else {
+            } else {
                 tag = new NbtCompound();
                 file.createNewFile();
             }
             NbtIo.writeCompressed(tag, new FileOutputStream(file));
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -96,19 +87,20 @@ public class NetworkManager {
         int y = blockChanged.pos.getY();
         int z = blockChanged.pos.getZ();
         World world = blockChanged.world;
+        BlockState state = blockChanged.state;
 
-        if (!canBeNet(blockChanged.state.getBlock())) {
+        if (!canBeNet(state.getBlock())) {
             return;
         }
 
-        NetworkComponentBlock component = (NetworkComponentBlock) blockChanged.state.getBlock();
+        NetworkComponentBlock component = (NetworkComponentBlock) state.getBlock();
 
         Set<Network> nets = NETS.computeIfAbsent(world.dimension.id, i -> new HashSet<>());
 
         //check for nets around this one
         Set<Network> sideNets = new HashSet<>();
-        for (Network net: nets) {
-            for (Vec3i offset: OFFSETS) {
+        for (Network net : nets) {
+            for (Vec3i offset : OFFSETS) {
                 int px = x + offset.getX();
                 int py = y + offset.getY();
                 int pz = z + offset.getZ();
@@ -122,39 +114,38 @@ public class NetworkManager {
         int size = sideNets.size();
         //no nets around, create one
         if (size == 0) {
-            net = new Network(world,component.getType());
-            net.addBlock(x, y, z);
-            for (Vec3i offset: OFFSETS) {
+            net = new Network(world, component.getType());
+            net.addBlock(x, y, z, state);
+            for (Vec3i offset : OFFSETS) {
                 int px = x + offset.getX();
                 int py = y + offset.getY();
                 int pz = z + offset.getZ();
+                BlockState pstate = world.getBlockState(px, py, pz);
                 if (canBeNet(world, px, py, pz)) {
-                    net.addBlock(px, py, pz);
+                    net.addBlock(px, py, pz, pstate);
                 }
             }
             if (net.getSize() > 1) {
                 nets.add(net);
             }
-        }
-        else if (size == 1) {
+        } else if (size == 1) {
             Network potentialNet = sideNets.stream().findAny().get();
-            if (potentialNet.isOfSameType(component)){
-                potentialNet.addBlock(x, y, z);
+            if (potentialNet.isOfSameType(component)) {
+                potentialNet.addBlock(x, y, z, state);
                 net = potentialNet;
             }
-        }
-        else { //multiple nets around
+        } else { //multiple nets around
             Network[] netsArray = sideNets.toArray(new Network[size]);
             Network main = null;
             for (Network network : netsArray) {
-                if (network.isOfSameType(component)){
+                if (network.isOfSameType(component)) {
                     main = network;
-                    main.addBlock(x, y, z);
+                    main.addBlock(x, y, z, state);
                     for (Network otherNet : netsArray) {
-                        if (otherNet == main){
+                        if (otherNet == main) {
                             continue;
                         }
-                        if (otherNet.isOfSameType(main)){
+                        if (otherNet.isOfSameType(main)) {
                             main.mergeNetwork(otherNet);
                             nets.remove(otherNet);
                         }
@@ -166,14 +157,15 @@ public class NetworkManager {
         }
 
         if (net == null && getNet(world, x, y, z) == null) {
-            net = new Network(world,component.getType());
-            net.addBlock(x, y, z);
-            for (Vec3i offset: OFFSETS) {
+            net = new Network(world, component.getType());
+            net.addBlock(x, y, z, state);
+            for (Vec3i offset : OFFSETS) {
                 int px = x + offset.getX();
                 int py = y + offset.getY();
                 int pz = z + offset.getZ();
+                BlockState pstate = world.getBlockState(px, py, pz);
                 if (canBeNet(world, px, py, pz)) {
-                    net.addBlock(px, py, pz);
+                    net.addBlock(px, py, pz, pstate);
                 }
             }
             if (net.getSize() > 1) {
@@ -186,10 +178,11 @@ public class NetworkManager {
             int px = x + offset.getX();
             int py = y + offset.getY();
             int pz = z + offset.getZ();
+            BlockState pstate = world.getBlockState(px, py, pz);
             if (canBeNet(world, px, py, pz) && getNet(world, px, py, pz) == null && net != null) {
                 NetworkComponentBlock sideComponent = (NetworkComponentBlock) world.getBlockState(px, py, pz).getBlock();
-                if (net.isOfSameType(sideComponent)){
-                    net.addBlock(px, py, pz);
+                if (net.isOfSameType(sideComponent)) {
+                    net.addBlock(px, py, pz, pstate);
                 }
             }
         }
@@ -207,7 +200,7 @@ public class NetworkManager {
         }
 
         Network target = null;
-        for (Network net: nets) {
+        for (Network net : nets) {
             if (net.existsOnPos(x, y, z)) {
                 target = net;
                 break;
@@ -219,8 +212,7 @@ public class NetworkManager {
             if (sideNets != null) {
                 nets.remove(target);
                 nets.addAll(sideNets);
-            }
-            else if (target.getSize() < 2) {
+            } else if (target.getSize() < 2) {
                 nets.remove(target);
             }
         }
@@ -282,7 +274,7 @@ public class NetworkManager {
     }
 
     public static boolean canBeNet(StationFlatteningWorld world, int x, int y, int z) {
-        Block block = world.getBlockState(x,y,z).getBlock();
+        Block block = world.getBlockState(x, y, z).getBlock();
         return canBeNet(block);
     }
 
@@ -290,10 +282,10 @@ public class NetworkManager {
         return block instanceof NetworkComponentBlock;
     }
 
-    private static Network getNet(World world, int x, int y, int z) {
+    public static Network getNet(World world, int x, int y, int z) {
         Set<Network> nets = NETS.get(world.dimension.id);
         if (nets != null) {
-            for (Network net: nets) {
+            for (Network net : nets) {
                 if (net.existsOnPos(x, y, z)) {
                     return net;
                 }
@@ -302,8 +294,8 @@ public class NetworkManager {
         return null;
     }
 
-    public static void updateAllNets(){
-        NETS.forEach((dimId, nets)->{
+    public static void updateAllNets() {
+        NETS.forEach((dimId, nets) -> {
             for (Network net : nets) {
                 net.update();
             }
